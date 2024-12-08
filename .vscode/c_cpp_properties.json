@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/usr/local/mysql-connector-c++/include/jdbc",
+                "/opt/homebrew/opt/argon2/include",
+                "/opt/homebrew/opt/openssl/include", 
+                "${workspaceFolder}/**" 
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++", 
+            "cStandard": "c11",  
+            "cppStandard": "c++17", 
+            "intelliSenseMode": "macos-gcc-arm64"
+        }
+    ],
+    "version": 4
+}
