@@ -1,6 +1,8 @@
 #include "DatabaseConnection.h"
 
 
+namespace Database {
+
 const std::string DBConnection::HOST = "tcp://127.0.0.1:3306";
 const std::string DBConnection::DB_NAME = "Authentication_Model";
 
@@ -24,4 +26,6 @@ DBConnection::~DBConnection(void) {
     if (con) {
         delete con;
     }
+}
+
 }
