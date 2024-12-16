@@ -1,22 +1,24 @@
-#ifndef AUTH_VIEW
-#define AUTH_VIEW
+#include "AuthView.h"
 
-#include <QApplication>
-#include <QTextStream>
-#include <QPushButton>
-#include <QLabel>
+AuthenticatorView::AuthenticatorView() {
+    setView()
+}
 
-class AuthenticatorView {
+void AuthenticatorView::setView(void) {
 
-public:
-    std::string getUsername(void);
-    std::string getPassword(void);
-    QPushButton getButton(void);
+}
 
-private:
-    QPushButton LoginButton;
-    QLabel NewUserLabel;
+std::string AuthenticatorView::getUsername(void) {
+    QString usernameStr = usernameInput->text();
+    return usernameStr.toStdString();
+}
 
-};
+std::string AuthenticatorView::getPassword(void) {
+    QString pwString = passwordInput->text();
+    return pwString.toStdString();
+}
 
-#endif // AUTH_VIEW
+QPushButton AuthenticatorView::getButton(void) {
+
+
+}
