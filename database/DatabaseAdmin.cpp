@@ -1,14 +1,34 @@
-#include <iostream>
-#include <memory>
 
-#include "DatabaseConnection.h"
+
+#include "DatabaseAdmin.h"
 
 // initialise database upon first call
 
-namespace Database { 
+namespace Database {
 
-    void generateDatabase(void) {
 
+    DatabaseAdmin::DatabaseAdmin(std::string path) {
+
+        // path to be provided by the controller
+
+        dbPath = path;
+
+        if (!checkDatabaseExists()) {
+            // initialise tables here
+            initUserTable();
+        }
+
+
+    }
+
+    bool DatabaseAdmin::checkDatabaseExists (void){
+        // check file before attempting to make a connection
+        std::ifstream file(dbPath);
+        return file.good();
+    }
+
+    void DatabaseAdmin::initUserTable(void) {
+        std::cout << "FIXME" << std::endl;
         try { 
 
             auto connection = std::make_unique<Connection::DBConnection>();
@@ -26,13 +46,13 @@ namespace Database {
         }
         catch (const sql::SQLException& e) {
             std::cout << "FIXME" << std::endl;
-            // error to throw
+            // TODO: error to throw
             throw ;
         }
 
     }
 
-    void deleteDatabase(void) {
+    void DatabaseAdmin::deleteUserTable(void) {
 
         std::cout << "FIXME" << std::endl;
 

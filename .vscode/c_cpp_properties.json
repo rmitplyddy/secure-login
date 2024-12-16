@@ -6,6 +6,10 @@
                 "/usr/local/mysql-connector-c++/include/jdbc",
                 "/opt/homebrew/opt/argon2/include",
                 "/opt/homebrew/opt/openssl/include", 
+                "/opt/homebrew/opt/googletest/include",
+                "/opt/homebrew/opt/qt/include/QtCore",
+                "/opt/homebrew/opt/qt/include/QtWidgets",
+                "/opt/homebrew/opt/qt/lib",
                 "${workspaceFolder}/**" 
             ],
             "defines": [],

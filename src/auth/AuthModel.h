@@ -3,14 +3,15 @@
 
 #include <string>
 #include <iostream>
+
+#include "database/DatabaseAdmin.h"
 #include "database/DatabaseUtils.h"
 
-namespace Model {
-    class Authenticator {
+// namespace Model {
+    class AuthenticatorModel {
 
     public:
-        Authenticator(std::string uname, std::string pw) 
-                    : username(uname), password(pw) {}
+        AuthenticatorModel(std::string uname, std::string pw);
         std::string getUsername() const { return username; }
         std::string getPassword() const { return password; }
         void displayAuthenticator(void) {
@@ -21,6 +22,6 @@ namespace Model {
         std::string username;
         std::string password;
     };
-}
+// }
 
 #endif // AUTHENTICATION_M
