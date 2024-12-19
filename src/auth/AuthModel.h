@@ -4,14 +4,17 @@
 #include <string>
 #include <iostream>
 
-#include "database/DatabaseAdmin.h"
-#include "database/DatabaseUtils.h"
+// #include "database/DatabaseAdmin.h"
+// #include "database/DatabaseUtils.h"
 
 // namespace Model {
     class AuthenticatorModel {
 
     public:
+        AuthenticatorModel() {}
         AuthenticatorModel(std::string uname, std::string pw);
+
+    protected:
         std::string getUsername() const { return username; }
         std::string getPassword() const { return password; }
         void displayAuthenticator(void) {

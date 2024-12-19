@@ -6,24 +6,48 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QDebug>
 
-class AuthenticatorView {
+#include <iostream>
+
+#include "AuthController.h"
+
+class AuthenticatorView : public QWidget {
+
+Q_OBJECT
 
 public:
-    AuthenticatorView();
+    AuthenticatorView(QWidget* parent = nullptr) : QWidget(parent) {
+        setView();
+    }
+    // AuthenticatorView(QWidget* parent = nullptr, 
+    //                         std::unique_ptr<AuthenticatorControl> authControl);
+    AuthenticatorView(std::shared_ptr<AuthenticatorControl> authControl);
+    // parent QWidget to handle deletion of raw ptrs
     std::string getUsername(void);
     std::string getPassword(void);
-    QPushButton getButton(void);
 
 protected:
     void setView(void);
 
 
 private:
-    QPushButton LoginButton;
-    std::unique_ptr<QLabel> newUserLabel;
-    std::unique_ptr<QLineEdit> usernameInput;
-    std::unique_ptr<QLineEdit> passwordInput;
+    std::unique_ptr<AuthenticatorControl> authController;
+    QPushButton* loginButton;
+    QLabel* newUserLabel;
+    QLineEdit* usernameInput;
+    QLineEdit* passwordInput;
+    
+
+private slots:
+    // slots used to support signals / listeners
+    void onButtonClicked(void);
+    void onHyperlinkClicked(const QString& link);
+
+// signals:
+//     void pressedLoginButton(void);
 
 };
 

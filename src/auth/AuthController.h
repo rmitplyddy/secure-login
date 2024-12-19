@@ -1,18 +1,24 @@
 #ifndef AUTH_CONTROL
 #define AUTH_CONTROL
 
+
 #include "AuthModel.h"
-#include "AuthView.h"
+// #include "AuthView.h"
 
 
 class AuthenticatorControl {
 
 
+public:
+    AuthenticatorControl() {}
+    AuthenticatorControl(std::shared_ptr<AuthenticatorModel> model) 
+                                        : authModel(model) {}
+
 protected:
-    AuthenticatorControl();
+
 
 private:
-    AuthenticatorModel model;
+    std::shared_ptr<AuthenticatorModel> authModel;
 
 };
 
