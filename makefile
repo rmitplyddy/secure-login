@@ -53,14 +53,20 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = src/main.cpp \
+		src/AppController.cpp \
 		src/auth/AuthView.cpp \
 		src/auth/AuthController.cpp \
-		src/auth/AuthModel.cpp moc_AuthView.cpp
+		src/auth/AuthModel.cpp moc_AppController.cpp \
+		moc_AuthView.cpp \
+		moc_AuthController.cpp
 OBJECTS       = main.o \
+		AppController.o \
 		AuthView.o \
 		AuthController.o \
 		AuthModel.o \
-		moc_AuthView.o
+		moc_AppController.o \
+		moc_AuthView.o \
+		moc_AuthController.o
 DIST          = /opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
 		/opt/homebrew/share/qt/mkspecs/features/device_config.prf \
 		/opt/homebrew/Cellar/qt/6.7.3/share/qt/mkspecs/common/unix.conf \
@@ -405,7 +411,10 @@ DIST          = /opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
 		/opt/homebrew/share/qt/mkspecs/features/yacc.prf \
 		/opt/homebrew/share/qt/mkspecs/features/lex.prf \
 		secure-login.pro src/AppController.h \
-		src/auth/AuthView.h src/main.cpp \
+		src/auth/AuthView.h \
+		src/auth/AuthController.h \
+		src/auth/AuthModel.h src/main.cpp \
+		src/AppController.cpp \
 		src/auth/AuthView.cpp \
 		src/auth/AuthController.cpp \
 		src/auth/AuthModel.cpp
@@ -1153,8 +1162,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/AppController.h src/auth/AuthView.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/auth/AuthView.cpp src/auth/AuthController.cpp src/auth/AuthModel.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/AppController.h src/auth/AuthView.h src/auth/AuthController.h src/auth/AuthModel.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/AppController.cpp src/auth/AuthView.cpp src/auth/AuthController.cpp src/auth/AuthModel.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1189,9 +1198,236 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -O2 -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=10.14 -Wall -Wextra -dM -E -o moc_predefs.h /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_AuthView.cpp
+compiler_moc_header_make_all: moc_AppController.cpp moc_AuthView.cpp moc_AuthController.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_AuthView.cpp
+	-$(DEL_FILE) moc_AppController.cpp moc_AuthView.cpp moc_AuthController.cpp
+moc_AppController.cpp: src/AppController.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnamespace.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobal.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversionchecks.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfiginclude.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconfig.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcore-config.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfigmacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcoreexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompilerdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qprocessordetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsystemdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtdeprecationmarkers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtpreprocessorsupport.h \
+		/opt/homebrew/opt/qt/include/QtCore/qassert.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtnoop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypes.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtclasshelpermacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypeinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsysinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlogging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qflags.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbasicatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic_cxx11.h \
+		/opt/homebrew/opt/qt/include/QtCore/qgenericatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qyieldcpu.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconstructormacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdarwinhelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexceptionhandling.h \
+		/opt/homebrew/opt/qt/include/QtCore/qforeach.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttypetraits.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobalstatic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmalloc.h \
+		/opt/homebrew/opt/qt/include/QtCore/qminmax.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnumeric.h \
+		/opt/homebrew/opt/qt/include/QtCore/qoverload.h \
+		/opt/homebrew/opt/qt/include/QtCore/qswap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtenvironmentvariables.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtresource.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttranslation.h \
+		/opt/homebrew/opt/qt/include/QtCore/qversiontagging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtmetamacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionaltools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstring.h \
+		/opt/homebrew/opt/qt/include/QtCore/qchar.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearray.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrefcount.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpair.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydatapointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydataops.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainertools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qxptype_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20type_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20functional.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20memory.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringliteral.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlatin1stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qanystringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qutf8stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringtokenizer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringbuilder.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter_base.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhashfunctions.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterator.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearraylist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringmatcher.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetatype.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcomparehelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdatastream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevicebase.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfloat16.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmath.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetacontainer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtaggedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopeguard.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbindingstorage.h \
+		src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtextstream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontiguouscache.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qset.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
+		src/auth/AuthView.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtguiglobal.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtgui-config.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtguiexports.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgets-config.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgetsexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreapplication.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdeadlinetimer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qelapsedtimer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qeventloop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnativeinterface.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreapplication_platform.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfuture.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfutureinterface.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmutex.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtsan_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qresultstore.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfuture_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qthreadpool.h \
+		/opt/homebrew/opt/qt/include/QtCore/qthread.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrunnable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexception.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpromise.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvariant.h \
+		/opt/homebrew/opt/qt/include/QtCore/q23utility.h \
+		/opt/homebrew/opt/qt/include/QtGui/qwindowdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpoint.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsize.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmargins.h \
+		/opt/homebrew/opt/qt/include/QtGui/qcursor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qbitmap.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpixmap.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpaintdevice.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrect.h \
+		/opt/homebrew/opt/qt/include/QtGui/qcolor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qrgb.h \
+		/opt/homebrew/opt/qt/include/QtGui/qrgba64.h \
+		/opt/homebrew/opt/qt/include/QtGui/qimage.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpixelformat.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtransform.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpolygon.h \
+		/opt/homebrew/opt/qt/include/QtGui/qregion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qline.h \
+		/opt/homebrew/opt/qt/include/QtGui/qguiapplication.h \
+		/opt/homebrew/opt/qt/include/QtGui/qinputmethod.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlocale.h \
+		/opt/homebrew/opt/qt/include/QtGui/qguiapplication_platform.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QTextStream \
+		/opt/homebrew/lib/QtCore.framework/Headers/qtextstream.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qabstractbutton.h \
+		/opt/homebrew/opt/qt/include/QtGui/qicon.h \
+		/opt/homebrew/opt/qt/include/QtGui/qkeysequence.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qwidget.h \
+		/opt/homebrew/opt/qt/include/QtGui/qaction.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpalette.h \
+		/opt/homebrew/opt/qt/include/QtGui/qbrush.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfont.h \
+		/opt/homebrew/opt/qt/include/QtCore/qendian.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfontmetrics.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfontinfo.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qsizepolicy.h \
+		/opt/homebrew/opt/qt/include/QtGui/qevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevice.h \
+		/opt/homebrew/opt/qt/include/QtCore/qurl.h \
+		/opt/homebrew/opt/qt/include/QtGui/qeventpoint.h \
+		/opt/homebrew/opt/qt/include/QtGui/qvector2d.h \
+		/opt/homebrew/opt/qt/include/QtGui/qvectornd.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpointingdevice.h \
+		/opt/homebrew/opt/qt/include/QtGui/qinputdevice.h \
+		/opt/homebrew/opt/qt/include/QtGui/qscreen.h \
+		/opt/homebrew/opt/qt/include/QtCore/QList \
+		/opt/homebrew/opt/qt/include/QtCore/QObject \
+		/opt/homebrew/opt/qt/include/QtCore/QRect \
+		/opt/homebrew/opt/qt/include/QtCore/QSize \
+		/opt/homebrew/opt/qt/include/QtCore/QSizeF \
+		/opt/homebrew/opt/qt/include/QtGui/QTransform \
+		/opt/homebrew/opt/qt/include/QtGui/qscreen_platform.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qframe.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpicture.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextdocument.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextcursor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextformat.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpen.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextoption.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qlayoutitem.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qboxlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qgridlayout.h \
+		src/user/new/NewUserController.h \
+		src/user/new/NewUserModel.h \
+		src/AppController.h \
+		src/user/new/NewUserView.h \
+		moc_predefs.h \
+		/opt/homebrew/share/qt/libexec/moc
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/phillyddy/projects/secure-login/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/phillyddy/projects/secure-login -I/opt/homebrew/opt/qt/include -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib src/AppController.h -o moc_AppController.cpp
+
 moc_AuthView.cpp: src/auth/AuthView.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
@@ -1406,9 +1642,132 @@ moc_AuthView.cpp: src/auth/AuthView.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
 		src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
 		moc_predefs.h \
 		/opt/homebrew/share/qt/libexec/moc
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/phillyddy/projects/secure-login/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/phillyddy/projects/secure-login -I/opt/homebrew/opt/qt/include -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib src/auth/AuthView.h -o moc_AuthView.cpp
+
+moc_AuthController.cpp: src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfigmacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfiginclude.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconfig.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcore-config.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypes.h \
+		/opt/homebrew/opt/qt/include/QtCore/qprocessordetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qassert.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompilerdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsystemdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcoreexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtdeprecationmarkers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversionchecks.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtnoop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtextstream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevicebase.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobal.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtpreprocessorsupport.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtclasshelpermacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypeinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsysinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlogging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qflags.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbasicatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic_cxx11.h \
+		/opt/homebrew/opt/qt/include/QtCore/qgenericatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qyieldcpu.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconstructormacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdarwinhelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexceptionhandling.h \
+		/opt/homebrew/opt/qt/include/QtCore/qforeach.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttypetraits.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobalstatic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmalloc.h \
+		/opt/homebrew/opt/qt/include/QtCore/qminmax.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnumeric.h \
+		/opt/homebrew/opt/qt/include/QtCore/qoverload.h \
+		/opt/homebrew/opt/qt/include/QtCore/qswap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtenvironmentvariables.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtresource.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttranslation.h \
+		/opt/homebrew/opt/qt/include/QtCore/qversiontagging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qchar.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearray.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrefcount.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnamespace.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtmetamacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpair.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydatapointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydataops.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainertools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qxptype_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20type_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20functional.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20memory.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringliteral.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter_base.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstring.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlatin1stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qanystringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qutf8stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringtokenizer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringbuilder.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontiguouscache.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhashfunctions.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetatype.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcomparehelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdatastream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfloat16.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmath.h \
+		/opt/homebrew/opt/qt/include/QtCore/qalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetacontainer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtaggedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionaltools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopeguard.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterator.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearraylist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringmatcher.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qset.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbindingstorage.h \
+		moc_predefs.h \
+		/opt/homebrew/share/qt/libexec/moc
+	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/phillyddy/projects/secure-login/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/phillyddy/projects/secure-login -I/opt/homebrew/opt/qt/include -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib src/auth/AuthController.h -o moc_AuthController.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -1587,8 +1946,14 @@ main.o: src/main.cpp /opt/homebrew/lib/QtWidgets.framework/Headers/QApplication 
 		/opt/homebrew/opt/qt/include/QtGui/qinputmethod.h \
 		/opt/homebrew/opt/qt/include/QtCore/qlocale.h \
 		/opt/homebrew/opt/qt/include/QtGui/qguiapplication_platform.h \
+		src/AppController.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
 		src/auth/AuthController.h \
 		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
 		src/auth/AuthView.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QTextStream \
 		/opt/homebrew/lib/QtCore.framework/Headers/qtextstream.h \
@@ -1641,9 +2006,234 @@ main.o: src/main.cpp /opt/homebrew/lib/QtWidgets.framework/Headers/QApplication 
 		/opt/homebrew/opt/qt/include/QtWidgets/qlayoutitem.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qboxlayout.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qgridlayout.h \
-		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
-		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h
+		src/user/new/NewUserController.h \
+		src/user/new/NewUserModel.h \
+		src/user/new/NewUserView.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o src/main.cpp
+
+AppController.o: src/AppController.cpp src/AppController.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnamespace.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobal.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversionchecks.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfiginclude.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconfig.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcore-config.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfigmacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcoreexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompilerdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qprocessordetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsystemdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtdeprecationmarkers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtpreprocessorsupport.h \
+		/opt/homebrew/opt/qt/include/QtCore/qassert.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtnoop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypes.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtclasshelpermacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypeinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsysinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlogging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qflags.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbasicatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic_cxx11.h \
+		/opt/homebrew/opt/qt/include/QtCore/qgenericatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qyieldcpu.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconstructormacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdarwinhelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexceptionhandling.h \
+		/opt/homebrew/opt/qt/include/QtCore/qforeach.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttypetraits.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobalstatic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmalloc.h \
+		/opt/homebrew/opt/qt/include/QtCore/qminmax.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnumeric.h \
+		/opt/homebrew/opt/qt/include/QtCore/qoverload.h \
+		/opt/homebrew/opt/qt/include/QtCore/qswap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtenvironmentvariables.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtresource.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttranslation.h \
+		/opt/homebrew/opt/qt/include/QtCore/qversiontagging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtmetamacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionaltools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstring.h \
+		/opt/homebrew/opt/qt/include/QtCore/qchar.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearray.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrefcount.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpair.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydatapointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydataops.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainertools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qxptype_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20type_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20functional.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20memory.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringliteral.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlatin1stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qanystringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qutf8stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringtokenizer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringbuilder.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter_base.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhashfunctions.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterator.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearraylist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringmatcher.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetatype.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcomparehelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdatastream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevicebase.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfloat16.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmath.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetacontainer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtaggedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopeguard.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbindingstorage.h \
+		src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtextstream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontiguouscache.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qset.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
+		src/auth/AuthView.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtguiglobal.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtgui-config.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtguiexports.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgets-config.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qtwidgetsexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreapplication.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdeadlinetimer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qelapsedtimer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qeventloop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnativeinterface.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreapplication_platform.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfuture.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfutureinterface.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmutex.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtsan_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qresultstore.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfuture_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qthreadpool.h \
+		/opt/homebrew/opt/qt/include/QtCore/qthread.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrunnable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexception.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpromise.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvariant.h \
+		/opt/homebrew/opt/qt/include/QtCore/q23utility.h \
+		/opt/homebrew/opt/qt/include/QtGui/qwindowdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpoint.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsize.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmargins.h \
+		/opt/homebrew/opt/qt/include/QtGui/qcursor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qbitmap.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpixmap.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpaintdevice.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrect.h \
+		/opt/homebrew/opt/qt/include/QtGui/qcolor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qrgb.h \
+		/opt/homebrew/opt/qt/include/QtGui/qrgba64.h \
+		/opt/homebrew/opt/qt/include/QtGui/qimage.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpixelformat.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtransform.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpolygon.h \
+		/opt/homebrew/opt/qt/include/QtGui/qregion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qline.h \
+		/opt/homebrew/opt/qt/include/QtGui/qguiapplication.h \
+		/opt/homebrew/opt/qt/include/QtGui/qinputmethod.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlocale.h \
+		/opt/homebrew/opt/qt/include/QtGui/qguiapplication_platform.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QTextStream \
+		/opt/homebrew/lib/QtCore.framework/Headers/qtextstream.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qabstractbutton.h \
+		/opt/homebrew/opt/qt/include/QtGui/qicon.h \
+		/opt/homebrew/opt/qt/include/QtGui/qkeysequence.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qwidget.h \
+		/opt/homebrew/opt/qt/include/QtGui/qaction.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpalette.h \
+		/opt/homebrew/opt/qt/include/QtGui/qbrush.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfont.h \
+		/opt/homebrew/opt/qt/include/QtCore/qendian.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfontmetrics.h \
+		/opt/homebrew/opt/qt/include/QtGui/qfontinfo.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qsizepolicy.h \
+		/opt/homebrew/opt/qt/include/QtGui/qevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevice.h \
+		/opt/homebrew/opt/qt/include/QtCore/qurl.h \
+		/opt/homebrew/opt/qt/include/QtGui/qeventpoint.h \
+		/opt/homebrew/opt/qt/include/QtGui/qvector2d.h \
+		/opt/homebrew/opt/qt/include/QtGui/qvectornd.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpointingdevice.h \
+		/opt/homebrew/opt/qt/include/QtGui/qinputdevice.h \
+		/opt/homebrew/opt/qt/include/QtGui/qscreen.h \
+		/opt/homebrew/opt/qt/include/QtCore/QList \
+		/opt/homebrew/opt/qt/include/QtCore/QObject \
+		/opt/homebrew/opt/qt/include/QtCore/QRect \
+		/opt/homebrew/opt/qt/include/QtCore/QSize \
+		/opt/homebrew/opt/qt/include/QtCore/QSizeF \
+		/opt/homebrew/opt/qt/include/QtGui/QTransform \
+		/opt/homebrew/opt/qt/include/QtGui/qscreen_platform.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qframe.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpicture.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextdocument.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QLineEdit \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextcursor.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextformat.h \
+		/opt/homebrew/opt/qt/include/QtGui/qpen.h \
+		/opt/homebrew/opt/qt/include/QtGui/qtextoption.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		/opt/homebrew/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qlayoutitem.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qboxlayout.h \
+		/opt/homebrew/opt/qt/include/QtWidgets/qgridlayout.h \
+		src/user/new/NewUserController.h \
+		src/user/new/NewUserModel.h \
+		src/user/new/NewUserView.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AppController.o src/AppController.cpp
 
 AuthView.o: src/auth/AuthView.cpp src/auth/AuthView.h \
 		/opt/homebrew/lib/QtWidgets.framework/Headers/QApplication \
@@ -1858,17 +2448,142 @@ AuthView.o: src/auth/AuthView.cpp src/auth/AuthView.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qgridlayout.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
-		src/auth/AuthController.h
+		src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AuthView.o src/auth/AuthView.cpp
 
-AuthController.o: src/auth/AuthController.cpp src/auth/AuthController.h
+AuthController.o: src/auth/AuthController.cpp src/auth/AuthController.h \
+		src/auth/AuthModel.h \
+		src/user/UserModel.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfigmacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtconfiginclude.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconfig.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcore-config.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypes.h \
+		/opt/homebrew/opt/qt/include/QtCore/qprocessordetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qassert.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompilerdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsystemdetection.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtcoreexports.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtdeprecationmarkers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversionchecks.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtnoop.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtextstream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiodevicebase.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobal.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtpreprocessorsupport.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtversion.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtclasshelpermacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtypeinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsysinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlogging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qflags.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbasicatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qatomic_cxx11.h \
+		/opt/homebrew/opt/qt/include/QtCore/qgenericatomic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qyieldcpu.h \
+		/opt/homebrew/opt/qt/include/QtCore/qconstructormacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdarwinhelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qexceptionhandling.h \
+		/opt/homebrew/opt/qt/include/QtCore/qforeach.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttypetraits.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qglobalstatic.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmalloc.h \
+		/opt/homebrew/opt/qt/include/QtCore/qminmax.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnumeric.h \
+		/opt/homebrew/opt/qt/include/QtCore/qoverload.h \
+		/opt/homebrew/opt/qt/include/QtCore/qswap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtenvironmentvariables.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtresource.h \
+		/opt/homebrew/opt/qt/include/QtCore/qttranslation.h \
+		/opt/homebrew/opt/qt/include/QtCore/qversiontagging.h \
+		/opt/homebrew/opt/qt/include/QtCore/qchar.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearray.h \
+		/opt/homebrew/opt/qt/include/QtCore/qrefcount.h \
+		/opt/homebrew/opt/qt/include/QtCore/qnamespace.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtmetamacros.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qpair.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydatapointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qarraydataops.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainertools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qxptype_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20type_traits.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20functional.h \
+		/opt/homebrew/opt/qt/include/QtCore/q20memory.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearrayview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringfwd.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringliteral.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter_base.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstring.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlatin1stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qanystringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qutf8stringview.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringtokenizer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringbuilder.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringconverter.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontiguouscache.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhashfunctions.h \
+		/opt/homebrew/opt/qt/include/QtCore/qsharedpointer_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetatype.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcompare.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcomparehelpers.h \
+		/opt/homebrew/opt/qt/include/QtCore/qdatastream.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfloat16.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmath.h \
+		/opt/homebrew/opt/qt/include/QtCore/qalgorithms.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterable.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmetacontainer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcontainerinfo.h \
+		/opt/homebrew/opt/qt/include/QtCore/qtaggedpointer.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobjectdefs_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qfunctionaltools_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qscopeguard.h \
+		/opt/homebrew/opt/qt/include/QtCore/qlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qiterator.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbytearraylist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringlist.h \
+		/opt/homebrew/opt/qt/include/QtCore/qstringmatcher.h \
+		/opt/homebrew/opt/qt/include/QtCore/qmap.h \
+		/opt/homebrew/opt/qt/include/QtCore/qshareddata_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qset.h \
+		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
+		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
+		/opt/homebrew/lib/QtCore.framework/Headers/QObject \
+		/opt/homebrew/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/opt/qt/include/QtCore/qcoreevent.h \
+		/opt/homebrew/opt/qt/include/QtCore/qobject_impl.h \
+		/opt/homebrew/opt/qt/include/QtCore/qbindingstorage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AuthController.o src/auth/AuthController.cpp
 
-AuthModel.o: src/auth/AuthModel.cpp src/auth/AuthModel.h
+AuthModel.o: src/auth/AuthModel.cpp src/auth/AuthModel.h \
+		src/user/UserModel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AuthModel.o src/auth/AuthModel.cpp
+
+moc_AppController.o: moc_AppController.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AppController.o moc_AppController.cpp
 
 moc_AuthView.o: moc_AuthView.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AuthView.o moc_AuthView.cpp
+
+moc_AuthController.o: moc_AuthController.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AuthController.o moc_AuthController.cpp
 
 ####### Install
 

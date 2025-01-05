@@ -1,11 +1,11 @@
 #include "AppController.h"
-#include <iostream>
 
-ApplicationControl::ApplicationControl(/*std::string dbPath*/) {
-    std::cout << "here" << std::endl;
-    // initDatabase(dbPath);
-    authenticateUser();
-}
+
+// ApplicationControl::ApplicationControl(/*std::string dbPath*/) {
+//     std::cout << "here" << std::endl;
+//     // initDatabase(dbPath);
+//     // authenticateUser();
+// }
 
 
 // void initDatabase(std::string dbPath) {
@@ -20,14 +20,18 @@ ApplicationControl::ApplicationControl(/*std::string dbPath*/) {
 
 void ApplicationControl::authenticateUser(void) {
 
-    // auto authView = std::make_unique<AuthenticatorView>();
-
-    std::cout << "here" << std::endl;
-    auto authModel = std::make_unique<AuthenticatorModel>();
-    auto authControl = std::make_unique<AuthenticatorControl>(std::move(authModel));
-    auto authView = std::make_unique<AuthenticatorView>(std::move(authControl));
-
+    auto authModel = std::make_shared<Model::AuthenticatorModel>();
+    auto authControl = AuthenticatorControl(this, authModel);
+    authView = std::make_unique<AuthenticatorView>(authControl);
     authView->show();
+}
+
+void ApplicationControl::createNewUser(void) {
+
+    // auto newUserModel = std::make_shared<Model::NewUserModel>();
+    // auto newUserControl = std::make_shared<NewUserController>(this, newUserModel);
+    // auto newUserView = std::make_unique<NewUserView>(newUserControl);
+    // newUserView->show();
 
 }
 

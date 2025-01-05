@@ -7,11 +7,17 @@
 //     setView();
 // }
 
-AuthenticatorView::AuthenticatorView(std::shared_ptr<AuthenticatorControl> authControl) {
+// AuthenticatorView::AuthenticatorView(std::unique_ptr<AuthenticatorControl> authControl) {
+//     this->authController = std::move(authControl);
+//     QWidget(nullptr); // produce own window
+//     setView();
+// }
+
+AuthenticatorView::AuthenticatorView(AuthenticatorControl& authControl) {
+    this->authController = std::make_unique<AuthenticatorControl>(&authControl);
     QWidget(nullptr); // produce own window
     setView();
 }
-
 
 
 void AuthenticatorView::setView(void) {
@@ -53,6 +59,8 @@ void AuthenticatorView::setView(void) {
 
 void AuthenticatorView::onButtonClicked() {
     qDebug() << "Login Button pressed"; // output to console
+    authController->handleUserAuthentication();
+    // authController.handleUserAuthentication();
 }
 
 
@@ -60,6 +68,7 @@ void AuthenticatorView::onButtonClicked() {
 void AuthenticatorView::onHyperlinkClicked(const QString& link) {
     // FIXME
     qDebug () << "Hyperlink clicked";
+    authController->handleNewUserRequest();
 
 }
 

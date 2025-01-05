@@ -1,6 +1,7 @@
 #ifndef AUTH_VIEW
 #define AUTH_VIEW
 
+
 #include <QApplication>
 #include <QTextStream>
 #include <QPushButton>
@@ -21,10 +22,15 @@ Q_OBJECT
 public:
     AuthenticatorView(QWidget* parent = nullptr) : QWidget(parent) {
         setView();
+        // authController = std::make_unique<AuthenticatorControl>();
     }
+    // ~AuthenticatorView() {
+    //     // delete authController;
+    // }
     // AuthenticatorView(QWidget* parent = nullptr, 
     //                         std::unique_ptr<AuthenticatorControl> authControl);
-    AuthenticatorView(std::shared_ptr<AuthenticatorControl> authControl);
+    // AuthenticatorView(std::unique_ptr<AuthenticatorControl> authControl);
+    AuthenticatorView(AuthenticatorControl& authControl);
     // parent QWidget to handle deletion of raw ptrs
     std::string getUsername(void);
     std::string getPassword(void);
@@ -35,6 +41,7 @@ protected:
 
 private:
     std::unique_ptr<AuthenticatorControl> authController;
+    // std::shared_ptr<AuthenticatorControl> authController;
     QPushButton* loginButton;
     QLabel* newUserLabel;
     QLineEdit* usernameInput;

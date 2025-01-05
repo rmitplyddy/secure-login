@@ -17,10 +17,10 @@ TARGET = secure-login
 TEMPLATE = app
 
 # Add the source files
-SOURCES += src/main.cpp src/auth/AuthView.cpp src/auth/AuthController.cpp src/auth/AuthModel.cpp
+SOURCES += src/main.cpp src/AppController.cpp src/auth/AuthView.cpp src/auth/AuthController.cpp src/auth/AuthModel.cpp 
 
 # Add header files (if any)
-HEADERS += src/AppController.h src/auth/AuthView.h # Add your .h files here
+HEADERS += src/AppController.h src/auth/AuthView.h src/auth/AuthController.h src/auth/AuthModel.h # Add your .h files here
 
 # Optionally, add include paths for external libraries (if needed)
 INCLUDEPATH += /opt/homebrew/opt/qt/include

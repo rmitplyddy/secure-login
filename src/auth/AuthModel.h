@@ -4,10 +4,12 @@
 #include <string>
 #include <iostream>
 
+#include "src/user/UserModel.h"
+
 // #include "database/DatabaseAdmin.h"
 // #include "database/DatabaseUtils.h"
 
-// namespace Model {
+namespace Model {
     class AuthenticatorModel {
 
     public:
@@ -25,6 +27,6 @@
         std::string username;
         std::string password;
     };
-// }
+}
 
 #endif // AUTHENTICATION_M
