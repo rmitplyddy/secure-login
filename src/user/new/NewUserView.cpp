@@ -1,63 +1,113 @@
 #include "NewUserView.h"
 
-NewUserView::NewUserView() {
-    QWidget(nullptr);
-    showView();
+const int NewUserView::MIN_PW_LENGTH = 12;
+const int NewUserView::MIN_USERNAME_LENGTH = 12;
+
+NewUserView::NewUserView(QWidget* parent) : UserBaseView(parent) {
+    vBox = new QVBoxLayout(this);
+    setView();
 }
 
-NewUserView::NewUserView(std::shared_ptr<NewUserController> control) {
-    QWidget(nullptr);
-    showView();
-}
+void NewUserView::setView() {
+    // signupButton = new QPushButton();
+    
+    // usernameInput = new CustomTextInput("Username: ", REGULAR, this);
+    // passwordInput = new CustomTextInput("Password: ", PASSWORD, this);
+    confirmPasswordInput = new CustomTextInput("Confirm Password", PASSWORD, this);
 
-void NewUserView::showView() {
-    signupButton = new QPushButton();
     currentUserLabel = new QLabel();
-    usernameInput = new QLineEdit();
-    passwordInput = new QLineEdit();
-
-    currentUserLabel->setText("Not yet a user? Click <a href='#'>here...</a>");
+    currentUserLabel->setText("Already a user? Click <a href='#'>here...</a>");
     currentUserLabel->setOpenExternalLinks(false);
     connect(currentUserLabel, &QLabel::linkActivated, this, 
                         &NewUserView::onHyperlinkClicked);
 
-    connect(signupButton, &QPushButton::clicked, this, 
-                            &NewUserView::onButtonClick);
+    // connect(signupButton, &QPushButton::clicked, this, 
+    //                         &NewUserView::onButtonClicked);
 
+    getButton()->setText("Sign up");
 
-
-    // textbox configuration
-    usernameInput->setPlaceholderText("Username:");
-    usernameInput->setMaxLength(50);
-    passwordInput->setPlaceholderText("Password:");
-    passwordInput->setMaxLength(50);
-
-    auto vBox = new QVBoxLayout(this);
+    vBox->addWidget(getUsernameInput());
+    vBox->addWidget(getPasswordInput());
+    vBox->addWidget(confirmPasswordInput);
+    vBox->addWidget(getButton());
+    vBox->addWidget(currentUserLabel);
 
     setLayout(vBox);
-
-
 }
 
-void NewUserView::onButtonClick() {
+bool NewUserView::checkPasswordsMatch(void) {
+    
+    bool mismatch = true;
+
+    if (passwordInput->getUserInput() != confirmPasswordInput->getUserInput()) {
+        passwordInput->displayError();
+        confirmPasswordInput->displayError("Passwords must match!");
+        // 
+    }
+    else {
+        passwordInput->clearError();
+        confirmPasswordInput->clearError();
+        mismatch = false;
+    }
+    return mismatch;
+}
+
+
+bool NewUserView::validatePasswordInput(void) {
+
+    // check password length meets minimum length
+
+    bool match = checkPasswordsMatch();
+    bool invalid = true;
+
+    int count = passwordInput->getUserInput().length();
+    if (count < MIN_PW_LENGTH) {
+        std::string minCharError = "Password must be greater than ";
+        minCharError.append(std::to_string(MIN_PW_LENGTH));
+        minCharError.append(" characters!");
+        passwordInput->displayError(minCharError);
+        // 
+    }
+    else {
+        passwordInput->clearError();
+        invalid = false;
+    }
+
+    qDebug() << std::to_string(invalid || match);
+
+    return invalid || match;
+}
+
+
+
+
+void NewUserView::onButtonClicked(void) {
     qDebug() << "New user Button clicked!";
-    controller->handleNewUser();
 
+    bool valid = false;
+
+    if (checkInputBoxes(vBox)) {
+        // do nothing
+        qDebug() << "empty input box!";
+    } else if (validatePasswordInput()) {
+        connect(passwordInput->getTextBox(), &QLineEdit::textChanged, 
+                this, &NewUserView::validatePasswordInput);
+    }  else {
+        emit signUpUser();
+    }
 }
 
 
-void NewUserView::onHyperlinkClicked(const QString& link) {
+void NewUserView::onHyperlinkClicked(void) {
     qDebug() << "Return to sign in screen";
-    controller->handleCurrentUser();
-
+    emit displayLoginScreen();
 }
 
 
-std::string NewUserView::setUsername(void) {
-
+std::string NewUserView::getUsername(void) {
+    return usernameInput->getUserInput();
 }
 
-std::string NewUserView::setPassword(void) {
-
-
+std::string NewUserView::getPassword(void) {
+    return passwordInput->getUserInput();
 }

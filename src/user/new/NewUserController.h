@@ -1,30 +1,36 @@
 #ifndef NEW_USER_CONTROL
 #define NEW_USER_CONTROL
 
-#include "NewUserModel.h"
-#include "src/AppController.h"
+#include "src/ModelFacade.h"
+// #include "src/AppController.h"
+#include "NewUserView.h"
 
+#include <iostream>
 #include <QDebug>
 
-class NewUserController {
+class NewUserController : public QObject {
 
-public: 
-    NewUserController(std::shared_ptr<Model::NewUserModel> model) : 
-                        newUserModel(model) {
-        // applicationControl = std::make_unique<ApplicationControl>(appControl);
+Q_OBJECT
+
+public:
+    NewUserController(NewUserView* view, 
+                        std::shared_ptr<Model::ModelFacade> mf, 
+                        QObject* parent = nullptr) : 
+                        QObject(parent), model(mf),
+                        newUserView(view)
+                        {
+        initConnections();
     }
-
-    // NewUserController(ApplicationControl& appControl, 
-    //                     std::shared_ptr<Model::NewUserModel> model) : 
-    //                     newUserModel(model) {
-    //     applicationControl = std::make_unique<ApplicationControl>(appControl);
-    // }
+    void initConnections(void);
     void handleNewUser(void);
-    void handleCurrentUser(void);
+
+signals:
+    void switchToLoginScreen(void);
+    void signalNewUserSuccess(void);
 
 private:
-    std::shared_ptr<Model::NewUserModel> newUserModel;
-    // std::shared_ptr<ApplicationControl> applicationControl;
+    std::shared_ptr<Model::ModelFacade> model;
+    NewUserView* newUserView;
 
 };
 

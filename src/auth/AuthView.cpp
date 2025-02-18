@@ -13,22 +13,26 @@
 //     setView();
 // }
 
-AuthenticatorView::AuthenticatorView(AuthenticatorControl& authControl) {
-    this->authController = std::make_unique<AuthenticatorControl>(&authControl);
-    QWidget(nullptr); // produce own window
+// AuthenticatorView::AuthenticatorView(AuthenticatorControl& authControl) {
+//     this->authController = std::make_unique<AuthenticatorControl>(&authControl);
+//     QWidget(nullptr); // produce own window
+//     setView();
+// }
+
+AuthenticatorView::AuthenticatorView(QWidget* parent) : UserBaseView(parent) {
     setView();
+    
+    // connect(loginButton, &QPushButton::clicked, 
+    //     this, &AuthenticatorView::onButtonClicked);
+    // authController = std::make_shared<AuthenticatorControl>();
+    // authController = std::make_unique<AuthenticatorControl>();
 }
 
 
 void AuthenticatorView::setView(void) {
 
+    vBox = new QVBoxLayout();
     newUserLabel = new QLabel(this);
-    usernameInput = new QLineEdit(this);
-    passwordInput = new QLineEdit(this);
-    loginButton = new QPushButton(this);
-
-    auto vBox = new QVBoxLayout(this);
-
     // new user option to take user to window
 
     newUserLabel->setText("Not yet a user? Click <a href='#'>here...</a>");
@@ -37,21 +41,17 @@ void AuthenticatorView::setView(void) {
                         &AuthenticatorView::onHyperlinkClicked);
 
     // textbox configuration
-    usernameInput->setPlaceholderText("Username:");
-    usernameInput->setMaxLength(50);
-    passwordInput->setPlaceholderText("Password:");
-    passwordInput->setMaxLength(50);
+    getUsernameInput()->getTextBox()->setPlaceholderText("Username");
+    getUsernameInput()->getTextBox()->setMaxLength(50);
+    getPasswordInput()->getTextBox()->setPlaceholderText("Password");
+    getPasswordInput()->getTextBox()->setMaxLength(50);
 
     // set button
-    loginButton->setText("Login");
-    connect(loginButton, &QPushButton::clicked, this, 
-                                &AuthenticatorView::onButtonClicked);
+    getButton()->setText("Login");
 
-
-    
-    vBox->addWidget(usernameInput);
-    vBox->addWidget(passwordInput);
-    vBox->addWidget(loginButton);
+    vBox->addWidget(getUsernameInput());
+    vBox->addWidget(getPasswordInput());
+    vBox->addWidget(getButton());
     vBox->addWidget(newUserLabel);
     setLayout(vBox);
 }
@@ -59,25 +59,28 @@ void AuthenticatorView::setView(void) {
 
 void AuthenticatorView::onButtonClicked() {
     qDebug() << "Login Button pressed"; // output to console
-    authController->handleUserAuthentication();
-    // authController.handleUserAuthentication();
+    emit pressedButton();
+
+    if (!checkInputBoxes(vBox)){
+        emit processAuthentication();
+    }
 }
 
-
-
-void AuthenticatorView::onHyperlinkClicked(const QString& link) {
+void AuthenticatorView::onHyperlinkClicked(void) {
     // FIXME
     qDebug () << "Hyperlink clicked";
-    authController->handleNewUserRequest();
+    emit displayNewUserScreen();
+    // emit hyperlinkClicked();
+    // authController->handleNewUserRequest();
 
 }
 
-std::string AuthenticatorView::getUsername(void) {
-    QString usernameStr = usernameInput->text();
-    return usernameStr.toStdString();
-}
+// std::string AuthenticatorView::getUsername(void) {
+//     QString usernameStr = usernameInput->text();
+//     return usernameStr.toStdString();
+// }
 
-std::string AuthenticatorView::getPassword(void) {
-    QString pwString = passwordInput->text();
-    return pwString.toStdString();
-}
+// std::string AuthenticatorView::getPassword(void) {
+//     QString pwString = passwordInput->text();
+//     return pwString.toStdString();
+// }

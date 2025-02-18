@@ -24,13 +24,15 @@ int main(int argc, char* argv[]) {
 
     ApplicationControl appControl;
     appControl.authenticateUser();
+    // auto authControl = AuthenticatorControl();
 
-    auto authControl = AuthenticatorControl();
-    auto authView = std::make_unique<AuthenticatorView>(authControl);
 
-    authView->show();
+    // auto authView = std::make_unique<AuthenticatorView>(authControl);
+    
+
+    // authView->show();
     // may need to load main controller into subcontrollersß
-    std::cout << "FIXME" << std::endl;
+    // std::cout << "FIXME" << std::endl;
 
     return app.exec();         // Start event loop
 }

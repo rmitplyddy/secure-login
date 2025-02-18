@@ -1,9 +1,20 @@
 #include "NewUserController.h"
 
-void NewUserController::handleNewUser(void) {
-    qDebug() << "Control: ready to handle new user";
+void NewUserController::initConnections(void) {
+    connect(this->newUserView, &NewUserView::signUpUser, this, &NewUserController::handleNewUser);
+    connect(this->newUserView, &NewUserView::displayLoginScreen, this, &NewUserController::switchToLoginScreen);
 }
 
-void NewUserController::handleCurrentUser(void) {
-    qDebug() << "Control: pass back to sign in screen";
+void NewUserController::handleNewUser(void) {
+
+    std::cout << newUserView->getUsername() << std::endl;
+
+    // check password match ??
+
+    model->createUser(newUserView->getUsername(), newUserView->getPassword());
+
+    qDebug() << "Control: ready to handle new user";
+    
+    emit signalNewUserSuccess();
+
 }

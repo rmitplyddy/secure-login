@@ -1,38 +1,47 @@
 #ifndef NEWUSER_VIEW
 #define NEWUSER_VIEW
 
-#include <QApplication>
-#include <QTextStream>
-#include <QWidget>
-#include <QPushButton>
-#include <QLabel>
-#include <QWidget>
-#include <QLineEdit>
-#include <QVBoxLayout>
-#include <QDebug>
+#include "src/user/UserBaseView.h"
 
-#include "NewUserController.h"
 
-class NewUserView : public QWidget {
+class NewUserView : public UserBaseView {
+
+Q_OBJECT
 
 public:
-    NewUserView();
-    NewUserView(std::shared_ptr<NewUserController> control);
-    void showView();
-    std::string setUsername(void);
-    std::string setPassword(void);
+    NewUserView(QWidget* parent = nullptr);
+    void setView(void);
+    std::string getUsername(void);
+    std::string getPassword(void);
+    // void resetView(void);
+    // bool checkInputBoxes(QLayout* layout);
+    bool checkPasswordsMatch(void);
+
+    
 
 private:
-    std::shared_ptr<NewUserController> controller;
+    
+    // std::shared_ptr<NewUserController> controller;
     QPushButton* signupButton;
     QLabel* currentUserLabel;
-    QLineEdit* usernameInput;
-    QLineEdit* passwordInput;
+    QVBoxLayout* vBox;
 
-private slots:
+    CustomTextInput* usernameInput;
+    CustomTextInput* passwordInput;
+    CustomTextInput* confirmPasswordInput;
 
-    void onButtonClick(void);
-    void onHyperlinkClicked(const QString& link);
+    const static int MIN_PW_LENGTH;
+    const static int MIN_USERNAME_LENGTH;
+
+
+signals:
+    void signUpUser(void);
+    void displayLoginScreen(void);
+
+public slots:
+    bool validatePasswordInput(void);
+    void onButtonClicked(void) override;
+    void onHyperlinkClicked(void);
 
 };
 

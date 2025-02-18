@@ -66,6 +66,7 @@
         "set": "cpp",
         "span": "cpp",
         "unordered_set": "cpp",
-        "qdebug": "cpp"
+        "qdebug": "cpp",
+        "qlabel": "cpp"
     }
 }

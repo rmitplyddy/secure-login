@@ -4,19 +4,23 @@
 #include <string>
 #include <iostream>
 
-#include "src/user/UserModel.h"
+// #include "src/user/UserModel.h"
 
 // #include "database/DatabaseAdmin.h"
 // #include "database/DatabaseUtils.h"
 
-namespace Model {
-    class AuthenticatorModel {
+// namespace Model {
+
+// change to DTO
+
+    class Authenticator {
 
     public:
-        AuthenticatorModel() {}
-        AuthenticatorModel(std::string uname, std::string pw);
+        Authenticator() {}
+        Authenticator(std::string uname, std::string pw) : 
+                            username(uname), password(pw) {}
 
-    protected:
+    public:
         std::string getUsername() const { return username; }
         std::string getPassword() const { return password; }
         void displayAuthenticator(void) {
@@ -27,6 +31,6 @@ namespace Model {
         std::string username;
         std::string password;
     };
-}
+// }
 
 #endif // AUTHENTICATION_M

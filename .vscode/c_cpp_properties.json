@@ -4,6 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "/usr/local/mysql-connector-c++/include/jdbc",
+                "/opt/homebrew/opt/sqlite/include",
                 "/opt/homebrew/opt/argon2/include",
                 "/opt/homebrew/opt/openssl/include", 
                 "/opt/homebrew/opt/googletest/include",

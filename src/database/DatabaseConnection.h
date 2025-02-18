@@ -1,8 +1,9 @@
 #ifndef DB_CONNECTION
 #define DB_CONNECTION
 
-#include <mysql_driver.h>
-#include <mysql_connection.h>
+#include <sqlite3.h>
+// #include <mysql_driver.h>
+// #include <mysql_connection.h>
 #include <cppconn/prepared_statement.h>
 #include <cppconn/resultset.h>
 #include <cppconn/exception.h>
@@ -21,7 +22,7 @@ namespace Database {
             }
 
         private:
-            std::unique_ptr<sql::mysql::MySQL_Driver> driver;
+            std::unique_ptr<sql::sqlite::MySQL_Driver> driver;
             sql::Connection* con;
             static const std::string HOST;
             static const std::string DB_NAME; 

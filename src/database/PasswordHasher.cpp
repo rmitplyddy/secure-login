@@ -1,6 +1,5 @@
 #include "PasswordHasher.h"
-#include <memory>
-#include <iostream>
+
 
 // https://en.wikipedia.org/wiki/Argon2
 // https://crypto.stackexchange.com/questions/39249/argon2-output-length-and-parameter-storage
@@ -44,8 +43,8 @@ std::string PasswordHasher::hash(const std::string& password) {
                         + std::to_string(parallelism) + "$" 
                         + saltBase + "$" + hashBase;
 
-    delete salt;
-    delete hash;
+    // delete salt;
+    // delete hash;
 
     return encoded;
 }

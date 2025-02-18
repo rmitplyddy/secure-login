@@ -10,21 +10,40 @@ QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-# Define the name of the target executable
 TARGET = secure-login
 
-# Define the type of template (application)
 TEMPLATE = app
 
-# Add the source files
-SOURCES += src/main.cpp src/AppController.cpp src/auth/AuthView.cpp src/auth/AuthController.cpp src/auth/AuthModel.cpp 
+SOURCES += src/main.cpp \
+            src/CustomTextInput.cpp \
+            src/AppController.cpp \
+            src/ModelFacade.cpp \
+            src/auth/AuthModel.cpp \
+            src/auth/AuthController.cpp \
+            src/user/UserBaseView.cpp \
+            src/auth/AuthView.cpp \
+            src/user/new/NewUserController.cpp \
+            src/user/new/NewUserView.cpp \
+            src/database/DatabaseUtils.cpp 
+            #src/database/PasswordHasher.cpp
 
-# Add header files (if any)
-HEADERS += src/AppController.h src/auth/AuthView.h src/auth/AuthController.h src/auth/AuthModel.h # Add your .h files here
+HEADERS += src/AppController.h \
+            src/ModelFacade.h \
+            src/UserDTO.h \
+            src/CustomTextInput.h \
+            src/auth/AuthModel.h \
+            src/auth/AuthController.h \
+            src/user/UserBaseView.h \
+            src/auth/AuthView.h \
+            src/user/new/NewUserController.h \
+            src/user/new/NewUserView.h \
+            src/database/DatabaseUtils.h
+            #src/database/PasswordHasher.h
 
-# Optionally, add include paths for external libraries (if needed)
-INCLUDEPATH += /opt/homebrew/opt/qt/include
+INCLUDEPATH += /opt/homebrew/opt/qt/include \
+                /opt/homebrew/opt/sqlite/include 
+                #/opt/homebrew/opt/argon2/include
 
-# Optionally, link Qt libraries explicitly
-#LIBS += -F/opt/homebrew/opt/qt/lib -framework Qt6Core -framework Qt6Gui
-
+LIBS += -F/opt/homebrew/Cellar/qt/6.7.3/lib -framework QtCore -framework QtGui \
+        -L/opt/homebrew/opt/sqlite/lib -lsqlite3 
+        #-L/opt/homebrew/opt/argon2/lib -largon2

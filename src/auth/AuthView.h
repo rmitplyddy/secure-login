@@ -1,60 +1,31 @@
 #ifndef AUTH_VIEW
 #define AUTH_VIEW
 
+#include "src/user/UserBaseView.h"
 
-#include <QApplication>
-#include <QTextStream>
-#include <QPushButton>
-#include <QLabel>
-#include <QLineEdit>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QDebug>
+#include "src/IView.h"
 
-#include <iostream>
 
-#include "AuthController.h"
-
-class AuthenticatorView : public QWidget {
+class AuthenticatorView : public UserBaseView {
 
 Q_OBJECT
 
 public:
-    AuthenticatorView(QWidget* parent = nullptr) : QWidget(parent) {
-        setView();
-        // authController = std::make_unique<AuthenticatorControl>();
-    }
-    // ~AuthenticatorView() {
-    //     // delete authController;
-    // }
-    // AuthenticatorView(QWidget* parent = nullptr, 
-    //                         std::unique_ptr<AuthenticatorControl> authControl);
-    // AuthenticatorView(std::unique_ptr<AuthenticatorControl> authControl);
-    AuthenticatorView(AuthenticatorControl& authControl);
-    // parent QWidget to handle deletion of raw ptrs
-    std::string getUsername(void);
-    std::string getPassword(void);
-
-protected:
-    void setView(void);
-
+    AuthenticatorView(QWidget* parent = nullptr);
 
 private:
-    std::unique_ptr<AuthenticatorControl> authController;
-    // std::shared_ptr<AuthenticatorControl> authController;
-    QPushButton* loginButton;
-    QLabel* newUserLabel;
-    QLineEdit* usernameInput;
-    QLineEdit* passwordInput;
-    
+    void setView(void) override;
+    QLabel* newUserLabel; // hyperlink
+    QVBoxLayout* vBox;
 
-private slots:
+signals:
+    void displayNewUserScreen(void);
+    void processAuthentication(void);
+
+public slots:
     // slots used to support signals / listeners
-    void onButtonClicked(void);
-    void onHyperlinkClicked(const QString& link);
-
-// signals:
-//     void pressedLoginButton(void);
+    void onButtonClicked(void) override;
+    void onHyperlinkClicked(void);
 
 };
 
