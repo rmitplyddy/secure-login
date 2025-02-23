@@ -6,7 +6,7 @@
 // }
 
 void AuthenticatorControl::initConnections(void) {
-    connect(this->authView, &AuthenticatorView::onButtonClicked, 
+    connect(this->authView, &AuthenticatorView::processAuthentication, 
                 this, &AuthenticatorControl::handleUserAuthentication);
     connect(this->authView, &AuthenticatorView::displayNewUserScreen, 
                 this, &AuthenticatorControl::switchToNewUserView);
@@ -21,12 +21,7 @@ void AuthenticatorControl::handleUserAuthentication(void) {
     // // handle user authentication here
     }
     else {
-        std::cout << "yet to authenticate" << std::endl;
+        std::string errMsg = "Incorrect username or password";
+        this->authView->displayViewError(errMsg);
     }
 }
-
-
-// void AuthenticatorControl::handleNewUserRequest(void) {
-//     qDebug() <<"Control: Ready to pass to new user request screen";
-//     // applicationControl->createNewUser(); // takes to new user screen
-// }

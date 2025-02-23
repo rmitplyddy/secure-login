@@ -5,6 +5,8 @@
 
 
 
+
+
 namespace Database {
 
    
@@ -41,12 +43,16 @@ namespace Database {
         return valid.str();
     }
 
+    // bool garbleDeGarble(std::string ePW) {
+    //     qDebug() << "garble garble";
+    //     qDebug() << ePW;
+    // }
+
 
     std::string initUserTable(const std::string& dbName) {
 
         std::ostringstream valid;
 
-        char *zErrMsg = 0;
         sqlite3 *db = nullptr;
         int rc = sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
@@ -57,9 +63,10 @@ namespace Database {
                             "PRIMARY KEY (username) " 
                             ");";
 
+        char *zErrMsg = 0;
         rc = sqlite3_exec(db, query.c_str(), NULL, 0, &zErrMsg);
 
-        if( rc != SQLITE_OK ){
+        if (rc != SQLITE_OK) {
             valid << " SQL error: " << zErrMsg << std::endl;
             sqlite3_free(zErrMsg);
         } else {
@@ -70,71 +77,87 @@ namespace Database {
         return valid.str();
     }
 
-    std::string validateUser(const std::unique_ptr<UserDTO>& auth) {
+    std::string validateUser(const std::unique_ptr<UserDTO>& auth, 
+                                            const std::string& dbName) {
+        // const std::string enteredPW = "frank";
+        // const std::string foundPW = "frank";
 
-        // try {
-            // std::unique_ptr<Connection::DBConnection> connection = 
-            //                 std::make_unique<Connection::DBConnection>();
-            // connection->getConnection();
+        // garbleDeGarble(enteredPW);
+        // qDebug() << "adfad";
+        // verifyPassword(enteredPW, foundPW);
 
-            // any necessary encryption conversion types here for validation
-            std::string hashedPW = ""; //FIXME
 
-            std::string query = "SELECT username "\ 
-                                "FROM users, "\ 
-                                "WHERE username = ? AND"\
-                                "WHERE password = ?";
 
-            // std::unique_ptr<sql::PreparedStatement> 
-            //             prepstmt(connection->getConnection()->prepareStatement(query));
+        sqlite3 *db = nullptr;
+        sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
-            // prepstmt->setString(1, auth->getUsername());
-            // prepstmt->setString(2, hashedPW);
+        std::ostringstream result("");
 
+        std::string query = "SELECT password "\ 
+                            "FROM users "\ 
+                            "WHERE username = ? ;";
+
+        sqlite3_stmt* stmt = nullptr;
+
+        int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+        
+        if (rc != SQLITE_OK) {
+            qDebug() << "prepared failure";
+            result << "SQL error: check binding error ";
+        }
+        else {
             
-            // std::unique_ptr<sql::ResultSet> 
-            //                         result(prepstmt->executeQuery(query));
+            rc = sqlite3_bind_text(stmt, 1, auth->username.c_str(), -1, SQLITE_TRANSIENT);
 
-            // while (result->next()) {
+            if (rc != SQLITE_OK) {
+                qDebug() << "binding failure";
+                result << "SQL error: check binding error ";
+            }
+            else {
+                if (sqlite3_step(stmt) == SQLITE_ROW) {
+                    const unsigned char* sqlresult = 
+                                sqlite3_column_text(stmt, 0);
+                    std::string storedPassword = 
+                        std::string(reinterpret_cast<const char*>(sqlresult));
+                    qDebug() << "stored:" << QString::fromStdString(storedPassword); 
+                    qDebug() << "entered:" << QString::fromStdString(auth->password); 
+                    std::string enteredPW = auth->password;
+                    if (verifyPassword(enteredPW, storedPassword)) {
+                        qDebug() << "success";
+                        result << "SUCCESS";
+                    } 
+                }
+            }
+        }
+        sqlite3_finalize(stmt); // deconstruct prepared statement
+        sqlite3_close(db);
 
-
-            // }
-            
-
-        // }
-        // catch (const sql::SQLException& e) {
-        //     std::cout << "FIXME" << std::endl;
-        //     throw ; //DBexception
-
-        // }
-        // catch (std::runtime_error& e) { // exceptions for DBconnection
-        //     std::cout << "FIXME" << std::endl;
-        //     throw ; // log of error
-
-        // }
+        return result.str();
     }
 
 
     std::string createUser(const std::unique_ptr<UserDTO>& newUser, 
                         const std::string& dbName) {
 
-        std::ostringstream qryResult;
+        std::ostringstream qryResult("");
 
+        qDebug() << "before the hash";
+        auto passwordHashed = hashAndSaltPassword(newUser->password);
+        qDebug() << "after the hash";
         // use password hashing functionality
         // auto passwordHasher = std::make_unique<PasswordHasher>();
-        // std::string hashedPassword = passwordHasher->hash(
+        // std::string password = passwordHasher->hash(
         //                                         newUser->getPassword());
         sqlite3 *db = nullptr;
         sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
         std::string query = 
                         "INSERT INTO users (username, password) VALUES (?, ?) ";
-
         sqlite3_stmt* stmt = nullptr;
         sqlite3_prepare_v2(db, query.c_str(), query.length(), &stmt, nullptr);
 
         sqlite3_bind_text(stmt, 1, newUser->username.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, newUser->hashedPassword.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, passwordHashed.c_str(), -1, SQLITE_STATIC);
 
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             qryResult << "User  " << newUser->username << " created successfully";

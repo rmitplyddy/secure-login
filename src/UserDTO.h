@@ -5,11 +5,11 @@
 
 struct UserDTO {
 
-    std::string username;
-    std::string hashedPassword;
+    const std::string username;
+    const std::string password;
 
     UserDTO(std::string name, std::string pw) : username(name), 
-                                            hashedPassword(pw) {};
+                                            password(pw) {};
 };
 
 

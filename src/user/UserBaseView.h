@@ -30,16 +30,20 @@ public:
     }
     void resetView(void);
     bool checkInputBoxes(QLayout* layout);
+    void displayViewError(std::string& errorMsg);
+    void clearViewError(void);
 
 protected:
     CustomTextInput* getUsernameInput(void) { return usernameInput; }
     CustomTextInput* getPasswordInput(void) { return passwordInput; }
     QPushButton* getButton(void) { return button; }
+    QLabel* getViewErrorLabel(void) { return viewError; } 
 
 private:
     QPushButton* button;
     CustomTextInput* usernameInput;
     CustomTextInput* passwordInput;
+    QLabel* viewError;
 
 signals:
     void pressedButton(void);

@@ -39,13 +39,13 @@ bool NewUserView::checkPasswordsMatch(void) {
     
     bool mismatch = true;
 
-    if (passwordInput->getUserInput() != confirmPasswordInput->getUserInput()) {
-        passwordInput->displayError();
+    if (getPasswordInput()->getUserInput() != confirmPasswordInput->getUserInput()) {
+        getPasswordInput()->displayError();
         confirmPasswordInput->displayError("Passwords must match!");
         // 
     }
     else {
-        passwordInput->clearError();
+        getPasswordInput()->clearError();
         confirmPasswordInput->clearError();
         mismatch = false;
     }
@@ -60,16 +60,16 @@ bool NewUserView::validatePasswordInput(void) {
     bool match = checkPasswordsMatch();
     bool invalid = true;
 
-    int count = passwordInput->getUserInput().length();
+    int count = getPasswordInput()->getUserInput().length();
     if (count < MIN_PW_LENGTH) {
         std::string minCharError = "Password must be greater than ";
         minCharError.append(std::to_string(MIN_PW_LENGTH));
         minCharError.append(" characters!");
-        passwordInput->displayError(minCharError);
+        getPasswordInput()->displayError(minCharError);
         // 
     }
     else {
-        passwordInput->clearError();
+        getPasswordInput()->clearError();
         invalid = false;
     }
 
@@ -90,7 +90,7 @@ void NewUserView::onButtonClicked(void) {
         // do nothing
         qDebug() << "empty input box!";
     } else if (validatePasswordInput()) {
-        connect(passwordInput->getTextBox(), &QLineEdit::textChanged, 
+        connect(getPasswordInput()->getTextBox(), &QLineEdit::textChanged, 
                 this, &NewUserView::validatePasswordInput);
     }  else {
         emit signUpUser();
@@ -105,9 +105,9 @@ void NewUserView::onHyperlinkClicked(void) {
 
 
 std::string NewUserView::getUsername(void) {
-    return usernameInput->getUserInput();
+    return getUsernameInput()->getUserInput();
 }
 
 std::string NewUserView::getPassword(void) {
-    return passwordInput->getUserInput();
+    return getPasswordInput()->getUserInput();
 }
