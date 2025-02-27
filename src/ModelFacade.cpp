@@ -5,7 +5,8 @@
 
 namespace Model {
 
-    bool ModelFacade::createUser(std::string username, std::string password) {
+
+    bool ModelFacade::createUser(const std::unique_ptr<UserDTO>& userDTO) {
 
         // create user model - validation checks
         // decide on where to put password logic checking
@@ -14,13 +15,7 @@ namespace Model {
         // check OWASP guidelines (ie min characters)
         // acceptable characters for hashing
 
-        auto userDTO = std::make_unique<UserDTO>(username, password);
-
         std::string result = Database::createUser(userDTO);
-
-        std::cout << "here" << std::endl;
-        std::cout << result << std::endl;
-
 
         bool success = false;
         if (result == "SUCCESS") {
@@ -31,18 +26,10 @@ namespace Model {
     }
 
 
-    bool ModelFacade::authenticateUser(std::string username, std::string password) {
+    bool ModelFacade::authenticateUser(const std::unique_ptr<UserDTO>& userDTO) {
 
         bool success = false;
 
-        std::cout << "authenticate user here" << std::endl;
-
-        
-
-        // encapsulate entered details as a DTO
-        auto userDTO = std::make_unique<UserDTO>(username, password);
-
-        std::cout << username << " " << password << std::endl;
         std::string result = Database::validateUser(userDTO);
 
         if (result == "SUCCESS") {
@@ -52,8 +39,8 @@ namespace Model {
         return success;
     }
 
-    bool ModelFacade::editUser(std::string username, std::string password){ 
-        std::cout << "FIXME" << username << password << std::endl;
+    bool ModelFacade::editUser(std::unique_ptr<UserDTO> userDTO){ 
+        std::cout << "FIXME" << userDTO->username << userDTO->password << std::endl;
         // FIXME
         return -1;
 

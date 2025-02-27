@@ -2,7 +2,6 @@
 #define AUTH_VIEW
 
 #include "src/user/UserBaseView.h"
-
 #include "src/IView.h"
 
 

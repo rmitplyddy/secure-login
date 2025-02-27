@@ -17,16 +17,8 @@ namespace Database {
 
     DatabaseAdmin::DatabaseAdmin(const std::string& path) {
 
-        // path to be provided by the controller
-
         dbPath = path.c_str();
         checkDatabaseExists();
-        // if (!checkDatabaseExists()) {
-        //     // initialise tables here
-        //     initUserTable();
-        // }
-
-
     }
 
     std::string DatabaseAdmin::checkDatabaseExists(std::string dbName){
@@ -54,11 +46,7 @@ namespace Database {
 
     std::string DatabaseAdmin::initUserTable(std::string dbName) {
 
-        // int rc = sqlite3_exec();
-        // std::cout << "FIXME" << std::endl;
-        // try { 
         std::ostringstream valid;
-            // auto connection = std::make_unique<Connection::DBConnection>();
         char *zErrMsg = 0;
         sqlite3 *db = nullptr;
         int rc = sqlite3_open(dbName.c_str(), &db); // db initialised to file
@@ -87,23 +75,8 @@ namespace Database {
 
         std::cout << "FIXME" << std::endl;
 
-        // try { 
+        std::string query = "DROP TABLE IF EXISTS users";
 
-            // auto connection = std::make_unique<Connection::DBConnection>();
-
-            std::string query = "DROP TABLE IF EXISTS users";
-
-            // auto stmt = std::make_unique<sql::Statement>(
-            //                 connection->getConnection()->createStatement());
-            // stmt->execute(query);
-
-
-        // }
-        // catch (const sql::SQLException& e) {
-        //     std::cout << "FIXME" << std::endl;
-        //     // error to throw
-        //     throw ;
-        // }
     }
 
 }

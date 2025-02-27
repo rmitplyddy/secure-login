@@ -9,20 +9,14 @@ NewUserView::NewUserView(QWidget* parent) : UserBaseView(parent) {
 }
 
 void NewUserView::setView() {
-    // signupButton = new QPushButton();
-    
-    // usernameInput = new CustomTextInput("Username: ", REGULAR, this);
-    // passwordInput = new CustomTextInput("Password: ", PASSWORD, this);
-    confirmPasswordInput = new CustomTextInput("Confirm Password", PASSWORD, this);
 
+    confirmPasswordInput = new CustomTextInput("Confirm Password", 
+                                                    PASSWORD, this);
     currentUserLabel = new QLabel();
     currentUserLabel->setText("Already a user? Click <a href='#'>here...</a>");
     currentUserLabel->setOpenExternalLinks(false);
     connect(currentUserLabel, &QLabel::linkActivated, this, 
                         &NewUserView::onHyperlinkClicked);
-
-    // connect(signupButton, &QPushButton::clicked, this, 
-    //                         &NewUserView::onButtonClicked);
 
     getButton()->setText("Sign up");
 
@@ -39,7 +33,8 @@ bool NewUserView::checkPasswordsMatch(void) {
     
     bool mismatch = true;
 
-    if (getPasswordInput()->getUserInput() != confirmPasswordInput->getUserInput()) {
+    if (getPasswordInput()->getUserInput() != 
+                                        confirmPasswordInput->getUserInput()) {
         getPasswordInput()->displayError();
         confirmPasswordInput->displayError("Passwords must match!");
         // 

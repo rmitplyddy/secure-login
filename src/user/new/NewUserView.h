@@ -10,18 +10,12 @@ Q_OBJECT
 
 public:
     NewUserView(QWidget* parent = nullptr);
-    void setView(void);
+    void setView(void) override;
     std::string getUsername(void);
     std::string getPassword(void);
-    // void resetView(void);
-    // bool checkInputBoxes(QLayout* layout);
     bool checkPasswordsMatch(void);
 
-    
-
 private:
-    
-    // std::shared_ptr<NewUserController> controller;
     QPushButton* signupButton;
     QLabel* currentUserLabel;
     QVBoxLayout* vBox;

@@ -1,8 +1,5 @@
 #include "UserBaseView.h"
 
-
-
-
 UserBaseView::UserBaseView(QWidget* parent) : QWidget(parent) {
 
     button = new QPushButton();
@@ -31,12 +28,6 @@ void UserBaseView::resetView(void) {
     for (auto* input : findChildren<CustomTextInput*>()) {
         input->clearError();
     }
-
-    // return cursor to the first input box
-    // if (auto* first = findChild<CustomTextInput*>()) {
-    //     first->getTextBox()->setFocus();
-    // }
-
 }
 
 
@@ -77,8 +68,8 @@ bool UserBaseView::checkInputBoxes(QLayout* layout) {
                 if (inputBox->getUserInput().empty()) {
                     isEmpty = true;
                     inputBox->displayError("Box cannot be empty... ");
-                    connect(inputBox->getTextBox(), &QLineEdit::textChanged, inputBox, 
-                        &CustomTextInput::clearError);
+                    connect(inputBox->getTextBox(), &QLineEdit::textChanged, 
+                            inputBox, &CustomTextInput::clearError);
                 }
             }
         } 

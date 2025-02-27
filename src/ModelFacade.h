@@ -23,9 +23,13 @@ namespace Model {
                 authModel = nullptr;
                 // authModel = nullptr;
             }
-            bool createUser(std::string, std::string);
-            bool authenticateUser(std::string, std::string);
-            bool editUser(std::string username, std::string password);
+            // bool createUser(std::string, std::string);
+            // bool authenticateUser(std::unique_ptr<UserDTO> userDTO);
+            // bool editUser(std::string username, std::string password);
+
+            bool createUser(const std::unique_ptr<UserDTO>& userDTO);
+            bool authenticateUser(const std::unique_ptr<UserDTO>& userDTO);
+            bool editUser(std::unique_ptr<UserDTO> userDTO);
         
         private:
             std::unique_ptr<Authenticator> authModel;

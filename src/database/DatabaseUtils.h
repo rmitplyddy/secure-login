@@ -5,12 +5,6 @@
 #include "PasswordHasher.h"
 #include "src/UserDTO.h"
 
-
-
-// #include "DatabaseConnection.h"
-
-// #include "auth/AuthModel.h"
-// #include "user/UserModel.h"
 #include <sqlite3.h>
 
 #include <iostream>
@@ -18,7 +12,6 @@
 #include <fstream>
 #include <string>
 #include <QDebug>
-
 
 
 namespace Database {

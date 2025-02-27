@@ -5,12 +5,10 @@
 #include <QObject>
 #include <QMessageBox>
 
-// #include "database/DatabaseAdmin.h"
 #include "auth/AuthController.h"
 #include "auth/AuthModel.h"
 #include "auth/AuthView.h"
 #include "user/new/NewUserController.h"
-#include "user/new/NewUserModel.h"
 #include "user/new/NewUserView.h"
 #include "ModelFacade.h"
 
@@ -21,11 +19,9 @@ class ApplicationControl : public QObject {
 Q_OBJECT
 
 public:
-    ApplicationControl(QObject *parent = nullptr /* std::string dbPath */) : 
+    ApplicationControl(QObject *parent = nullptr) : 
                         QObject(parent) {
         model = std::make_shared<Model::ModelFacade>();
-        // authView = nullptr;
-        qDebug() << "app control called";
     }
 
 public slots:

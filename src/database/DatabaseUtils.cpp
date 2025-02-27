@@ -4,9 +4,6 @@
 // update namespace for modules with c++ v20
 
 
-
-
-
 namespace Database {
 
    
@@ -43,11 +40,6 @@ namespace Database {
         return valid.str();
     }
 
-    // bool garbleDeGarble(std::string ePW) {
-    //     qDebug() << "garble garble";
-    //     qDebug() << ePW;
-    // }
-
 
     std::string initUserTable(const std::string& dbName) {
 
@@ -79,14 +71,6 @@ namespace Database {
 
     std::string validateUser(const std::unique_ptr<UserDTO>& auth, 
                                             const std::string& dbName) {
-        // const std::string enteredPW = "frank";
-        // const std::string foundPW = "frank";
-
-        // garbleDeGarble(enteredPW);
-        // qDebug() << "adfad";
-        // verifyPassword(enteredPW, foundPW);
-
-
 
         sqlite3 *db = nullptr;
         sqlite3_open(dbName.c_str(), &db); // db initialised to file
@@ -102,15 +86,14 @@ namespace Database {
         int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
         
         if (rc != SQLITE_OK) {
-            qDebug() << "prepared failure";
             result << "SQL error: check binding error ";
         }
         else {
             
-            rc = sqlite3_bind_text(stmt, 1, auth->username.c_str(), -1, SQLITE_TRANSIENT);
+            rc = sqlite3_bind_text(stmt, 1, auth->username.c_str(), -1, 
+                                    SQLITE_TRANSIENT);
 
             if (rc != SQLITE_OK) {
-                qDebug() << "binding failure";
                 result << "SQL error: check binding error ";
             }
             else {
@@ -119,8 +102,10 @@ namespace Database {
                                 sqlite3_column_text(stmt, 0);
                     std::string storedPassword = 
                         std::string(reinterpret_cast<const char*>(sqlresult));
-                    qDebug() << "stored:" << QString::fromStdString(storedPassword); 
-                    qDebug() << "entered:" << QString::fromStdString(auth->password); 
+                    qDebug() << "stored:" << QString::fromStdString(
+                                                                storedPassword); 
+                    qDebug() << "entered:" << QString::fromStdString(
+                                                                auth->password); 
                     std::string enteredPW = auth->password;
                     if (verifyPassword(enteredPW, storedPassword)) {
                         qDebug() << "success";
@@ -131,7 +116,6 @@ namespace Database {
         }
         sqlite3_finalize(stmt); // deconstruct prepared statement
         sqlite3_close(db);
-
         return result.str();
     }
 
@@ -141,13 +125,8 @@ namespace Database {
 
         std::ostringstream qryResult("");
 
-        qDebug() << "before the hash";
         auto passwordHashed = hashAndSaltPassword(newUser->password);
-        qDebug() << "after the hash";
-        // use password hashing functionality
-        // auto passwordHasher = std::make_unique<PasswordHasher>();
-        // std::string password = passwordHasher->hash(
-        //                                         newUser->getPassword());
+
         sqlite3 *db = nullptr;
         sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
@@ -160,7 +139,8 @@ namespace Database {
         sqlite3_bind_text(stmt, 2, passwordHashed.c_str(), -1, SQLITE_STATIC);
 
         if (sqlite3_step(stmt) == SQLITE_DONE) {
-            qryResult << "User  " << newUser->username << " created successfully";
+            qryResult << "User  " << newUser->username << 
+                                                " created successfully";
         }
         else {
             qryResult << "Execution failed";
@@ -168,6 +148,8 @@ namespace Database {
 
         sqlite3_finalize(stmt); // deconstruct prepared statement
         sqlite3_close(db);
+
+        
 
         return qryResult.str();
     }

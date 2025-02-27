@@ -1,20 +1,20 @@
 #include "NewUserController.h"
 
 void NewUserController::initConnections(void) {
-    connect(this->newUserView, &NewUserView::signUpUser, this, &NewUserController::handleNewUser);
-    connect(this->newUserView, &NewUserView::displayLoginScreen, this, &NewUserController::switchToLoginScreen);
+    connect(this->newUserView, &NewUserView::signUpUser, this, 
+            &NewUserController::handleNewUser);
+    connect(this->newUserView, &NewUserView::displayLoginScreen, this, 
+            &NewUserController::switchToLoginScreen);
 }
 
 void NewUserController::handleNewUser(void) {
 
     std::cout << newUserView->getUsername() << std::endl;
 
-    // check password match ??
+    auto userDTO = std::make_unique<UserDTO>(newUserView->getUsername(),
+                    newUserView->getPassword());
 
-    model->createUser(newUserView->getUsername(), newUserView->getPassword());
-
-    qDebug() << "Control: ready to handle new user";
-    
-    emit signalNewUserSuccess();
-
+    if (model->createUser(userDTO)) {
+        emit signalNewUserSuccess();
+    }
 }

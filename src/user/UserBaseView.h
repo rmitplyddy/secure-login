@@ -12,9 +12,6 @@
 #include <QVBoxLayout>
 #include <QDebug>
 
-
-
-
 class UserBaseView : public QWidget {
 
 Q_OBJECT

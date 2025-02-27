@@ -2,7 +2,6 @@
 #define NEW_USER_CONTROL
 
 #include "src/ModelFacade.h"
-// #include "src/AppController.h"
 #include "NewUserView.h"
 
 #include <iostream>
@@ -26,6 +25,7 @@ public:
 
 signals:
     void switchToLoginScreen(void);
+    // void processNewUserInformation(void);
     void signalNewUserSuccess(void);
 
 private:

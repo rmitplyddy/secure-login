@@ -1,10 +1,5 @@
 #include "AuthController.h"
 
-
-// IView AuthenticatorControl::getView() {
-//     return *authView;
-// }
-
 void AuthenticatorControl::initConnections(void) {
     connect(this->authView, &AuthenticatorView::processAuthentication, 
                 this, &AuthenticatorControl::handleUserAuthentication);
@@ -14,14 +9,15 @@ void AuthenticatorControl::initConnections(void) {
 
 void AuthenticatorControl::handleUserAuthentication(void) {
     qDebug() << "Control: Ready to handle user Authentication";
-    // emit loginSuccess();
-    if (authModel->authenticateUser(authView->getUsername(), 
-                    authView->getPassword())) {
-        emit loginSuccess();
-    // // handle user authentication here
-    }
-    else {
+
+    auto userDTO = std::make_unique<UserDTO>(authView->getUsername(),
+                    authView->getPassword());
+
+    if (!authModel->authenticateUser(std::move(userDTO))) {
         std::string errMsg = "Incorrect username or password";
         this->authView->displayViewError(errMsg);
+    }
+    else {
+        emit loginSuccess();
     }
 }
