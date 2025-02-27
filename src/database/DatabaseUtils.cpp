@@ -40,33 +40,70 @@ namespace Database {
         return valid.str();
     }
 
+    // userID should be randomised
 
-    std::string initUserTable(const std::string& dbName) {
+    // std::string initUserTable(const std::string& dbName, std::string query) {
 
-        std::ostringstream valid;
+    //     std::ostringstream valid;
 
-        sqlite3 *db = nullptr;
-        int rc = sqlite3_open(dbName.c_str(), &db); // db initialised to file
+    //     sqlite3 *db = nullptr;
+    //     int rc = sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
 
-        std::string query = "CREATE TABLE IF NOT EXISTS users ("
-                            "username int NOT NULL, "
-                            "password VARCHAR(100), "
-                            "PRIMARY KEY (username) " 
-                            ");";
+    //     // std::string query = "CREATE TABLE IF NOT EXISTS users ("
+    //     //                     "userID int PRIMARY KEY, "
+    //     //                     "username VARCHAR(255) UNIQUE, "
+    //     //                     "password VARCHAR(255), "
+    //     //                     "PRIMARY KEY (username) " 
+    //     //                     ");";
 
-        char *zErrMsg = 0;
-        rc = sqlite3_exec(db, query.c_str(), NULL, 0, &zErrMsg);
+    //     char *zErrMsg = 0;
+    //     rc = sqlite3_exec(db, query.c_str(), NULL, 0, &zErrMsg);
 
-        if (rc != SQLITE_OK) {
-            valid << " SQL error: " << zErrMsg << std::endl;
-            sqlite3_free(zErrMsg);
-        } else {
-            valid << "Table created successfully " << std::endl;
-        }
-        sqlite3_close(db);
+    //     if (rc != SQLITE_OK) {
+    //         valid << " SQL error: " << zErrMsg << std::endl;
+    //         sqlite3_free(zErrMsg);
+    //     } else {
+    //         valid << "Table created successfully " << std::endl;
+    //     }
+    //     sqlite3_close(db);
 
-        return valid.str();
+    //     return valid.str();
+    // }
+
+/*
+Pseudo code for authentication:
+
+-- using the "quick exit approach"
+
+        password_hash=HASH(password)
+        IS_VALID=LOOKUP_CREDENTIALS_IN_STORE(username, password_hash)
+        IF NOT IS_VALID THEN
+        RETURN Error("Invalid Username or Password!")
+        ENDIF
+
+
+checking both username and password at the same time to avoid time-based 
+attacks.
+
+
+*/
+
+
+
+
+// Track a failed attempt
+// INSERT INTO login_attempts (username, success) VALUES ('user1', FALSE);
+
+// Check failed attempts for a user (e.g., within the last 30 minutes)
+// SELECT COUNT(*) FROM login_attempts
+// WHERE username = 'user1'
+// AND success = FALSE
+// AND attempt_time > NOW() - INTERVAL 30 MINUTE;
+
+
+    int checkLoginAttempts(const std::unique_ptr<UserDTO>& newUser, sqlite3* db) {
+
     }
 
     std::string validateUser(const std::unique_ptr<UserDTO>& auth, 
@@ -102,13 +139,8 @@ namespace Database {
                                 sqlite3_column_text(stmt, 0);
                     std::string storedPassword = 
                         std::string(reinterpret_cast<const char*>(sqlresult));
-                    qDebug() << "stored:" << QString::fromStdString(
-                                                                storedPassword); 
-                    qDebug() << "entered:" << QString::fromStdString(
-                                                                auth->password); 
                     std::string enteredPW = auth->password;
                     if (verifyPassword(enteredPW, storedPassword)) {
-                        qDebug() << "success";
                         result << "SUCCESS";
                     } 
                 }

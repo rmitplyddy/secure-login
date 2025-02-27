@@ -19,13 +19,16 @@ namespace Database {
             delete dbPath; 
         }
         std::string checkDatabaseExists(std::string dbName = DATABASE_FILE);
-        std::string initUserTable(std::string dbName = DATABASE_FILE);
+        std::string initTable(std::string query, 
+                            std::string dbName = DATABASE_FILE);
         void deleteUserTable(void);
 
     private:
         static std::string DATABASE_FILE;
         const char* dbPath;
         sqlite3* db;
+        const static std::string USER_TABLE_STATEMENT;
+        const static std::string LOGIN_ATTEMPTS_TABLE_STATEMENT;
     };
 }
 

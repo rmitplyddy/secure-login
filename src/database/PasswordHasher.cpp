@@ -1,5 +1,10 @@
 #include "PasswordHasher.h"
 
+
+// password hashing algorithms recommended include: bcrypt, scrypt, Argon2
+// defense against brute force attacks. contain built in mechanisms for 
+// salting and key stretching
+
 // https://en.wikipedia.org/wiki/Argon2
 // https://crypto.stackexchange.com/questions/39249/argon2-output-length-and-parameter-storage
 

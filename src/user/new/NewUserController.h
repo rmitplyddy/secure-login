@@ -25,7 +25,6 @@ public:
 
 signals:
     void switchToLoginScreen(void);
-    // void processNewUserInformation(void);
     void signalNewUserSuccess(void);
 
 private:

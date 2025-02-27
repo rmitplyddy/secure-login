@@ -19,11 +19,12 @@ namespace Database {
     inline constexpr const char* DATABASE_FILE = "secure-login.db";
 
     std::string checkDatabaseExists(const std::string& dbName = DATABASE_FILE);
-    std::string initUserTable(const std::string& dbName = DATABASE_FILE);
     std::string validateUser(const std::unique_ptr<UserDTO>& auth, 
                             const std::string& dbname = DATABASE_FILE);
     std::string createUser(const std::unique_ptr<UserDTO>& newUser, 
                             const std::string& dbname = DATABASE_FILE);
+    int checkLoginAttempts(const std::unique_ptr<UserDTO>& newUser, 
+                            sqlite3* db);
 
     
 }

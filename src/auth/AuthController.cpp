@@ -8,12 +8,10 @@ void AuthenticatorControl::initConnections(void) {
 }
 
 void AuthenticatorControl::handleUserAuthentication(void) {
-    qDebug() << "Control: Ready to handle user Authentication";
-
     auto userDTO = std::make_unique<UserDTO>(authView->getUsername(),
                     authView->getPassword());
 
-    if (!authModel->authenticateUser(std::move(userDTO))) {
+    if (!authModel->authenticateUser(userDTO)) {
         std::string errMsg = "Incorrect username or password";
         this->authView->displayViewError(errMsg);
     }

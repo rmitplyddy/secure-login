@@ -7,11 +7,28 @@
 namespace Database {
 
     std::string DatabaseAdmin::DATABASE_FILE = "secure-login.db";
+    const std::string DatabaseAdmin::USER_TABLE_STATEMENT = 
+                            "CREATE TABLE IF NOT EXISTS users ("
+                            "username int NOT NULL, "
+                            "password VARCHAR(100), "
+                            "PRIMARY KEY (username) " 
+                            ");";
+    // table to track login attempts
+    const std::string DatabaseAdmin::LOGIN_ATTEMPTS_TABLE_STATEMENT = 
+                            "CREATE TABLE login_attempts ("
+                            "userID INT PRIMARY KEY AUTO_INCREMENT,"
+                            "username VARCHAR(255),"
+                            "attemptTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                            "success BOOLEAN"
+                            ");";
+
+
 
     DatabaseAdmin::DatabaseAdmin() {
 
         if (checkDatabaseExists() == "SUCCESS") {
-            std::cout << initUserTable() << std::endl;
+            std::cout << initTable(USER_TABLE_STATEMENT) << std::endl;
+            initTable(LOGIN_ATTEMPTS_TABLE_STATEMENT);
         }
     }
 
@@ -44,21 +61,15 @@ namespace Database {
         return valid.str();
     }
 
-    std::string DatabaseAdmin::initUserTable(std::string dbName) {
+    std::string DatabaseAdmin::initTable(std::string query, 
+                                        std::string dbName) {
 
         std::ostringstream valid;
         char *zErrMsg = 0;
         sqlite3 *db = nullptr;
         int rc = sqlite3_open(dbName.c_str(), &db); // db initialised to file
 
-
-        char* query = "CREATE TABLE IF NOT EXISTS users ("
-                            "username int NOT NULL, "
-                            "password VARCHAR(100), "
-                            "PRIMARY KEY (username) " 
-                            ");";
-
-        rc = sqlite3_exec(db, query, NULL, 0, &zErrMsg);
+        rc = sqlite3_exec(db, query.c_str(), NULL, 0, &zErrMsg);
 
         if( rc != SQLITE_OK ){
             valid << " SQL error: " << zErrMsg << std::endl;
