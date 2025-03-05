@@ -11,9 +11,10 @@ void AuthenticatorControl::handleUserAuthentication(void) {
     auto userDTO = std::make_unique<UserDTO>(authView->getUsername(),
                     authView->getPassword());
 
-    if (!authModel->authenticateUser(userDTO)) {
-        std::string errMsg = "Incorrect username or password";
-        this->authView->displayViewError(errMsg);
+    std::string authResult = authModel->authenticateUser(userDTO);
+
+    if (authResult != "SUCCESS") {
+        this->authView->displayViewError(authResult);
     }
     else {
         emit loginSuccess();

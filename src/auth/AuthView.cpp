@@ -37,7 +37,6 @@ void AuthenticatorView::setView(void) {
 
 
 void AuthenticatorView::onButtonClicked() {
-    qDebug() << "Login Button pressed"; // output to console
     emit pressedButton();
 
     if (!checkInputBoxes(vBox)){

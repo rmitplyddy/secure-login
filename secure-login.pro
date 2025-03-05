@@ -18,28 +18,28 @@ SOURCES += src/main.cpp \
             src/CustomTextInput.cpp \
             src/AppController.cpp \
             src/ModelFacade.cpp \
-            src/auth/AuthModel.cpp \
             src/auth/AuthController.cpp \
             src/user/UserBaseView.cpp \
             src/auth/AuthView.cpp \
             src/user/new/NewUserController.cpp \
             src/user/new/NewUserView.cpp \
              src/database/PasswordHasher.cpp \
-            src/database/DatabaseUtils.cpp 
+            src/database/DatabaseUtils.cpp \
+            src/database/DatabaseAdmin.cpp 
            
 
 HEADERS += src/AppController.h \
             src/ModelFacade.h \
             src/UserDTO.h \
             src/CustomTextInput.h \
-            src/auth/AuthModel.h \
             src/auth/AuthController.h \
             src/user/UserBaseView.h \
             src/auth/AuthView.h \
             src/user/new/NewUserController.h \
             src/user/new/NewUserView.h \
             src/database/PasswordHasher.h \
-            src/database/DatabaseUtils.h
+            src/database/DatabaseUtils.h \
+            src/database/DatabaseAdmin.cpp 
             
 
 INCLUDEPATH += /opt/homebrew/opt/qt/include \

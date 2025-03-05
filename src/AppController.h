@@ -6,7 +6,6 @@
 #include <QMessageBox>
 
 #include "auth/AuthController.h"
-#include "auth/AuthModel.h"
 #include "auth/AuthView.h"
 #include "user/new/NewUserController.h"
 #include "user/new/NewUserView.h"

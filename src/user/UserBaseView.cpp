@@ -54,15 +54,11 @@ bool UserBaseView::checkInputBoxes(QLayout* layout) {
     // recursive function to find nested custom layouts
     // with empty text boxes
 
-    qDebug() << "Checking widgets...";
-    qDebug() << layout->count();
-
     bool isEmpty = false;
 
     for (int i = 0; i < layout->count(); ++i) {
         QLayoutItem* item = layout->itemAt(i);
         if (QWidget* widget = item->widget()) {
-            qDebug() << "Widget type: " << widget->metaObject()->className();
             if (CustomTextInput* inputBox = 
                 qobject_cast<CustomTextInput*>(widget)) {
                 if (inputBox->getUserInput().empty()) {

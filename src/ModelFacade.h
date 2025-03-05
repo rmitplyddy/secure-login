@@ -1,9 +1,8 @@
 #ifndef MODEL_FACADE
 #define MODEL_FACADE
 
-
-#include "auth/AuthModel.h"
 #include "UserDTO.h"
+#include "database/DatabaseAdmin.h"
 #include "database/DatabaseUtils.h"
 
 
@@ -14,20 +13,18 @@ namespace Model {
         
         public:
             ModelFacade() {
-                Database::checkDatabaseExists();
-                Database::initUserTable();
-                authModel = nullptr;
+                auto database = std::make_unique<Database::DatabaseAdmin>();
             }
 
-            void checkPasswordStrength(const std::unique_ptr<UserDTO>& userDTO);
+            void checkPasswordStrength(
+                                const std::unique_ptr<UserDTO>& userDTO);
             bool createUser(const std::unique_ptr<UserDTO>& userDTO);
-            bool authenticateUser(const std::unique_ptr<UserDTO>& userDTO);
+            std::string authenticateUser(
+                                const std::unique_ptr<UserDTO>& userDTO);
             bool editUser(std::unique_ptr<UserDTO> userDTO);
         
         private:
-            std::unique_ptr<Authenticator> authModel;
             int loginAttempts;
-
             const static int MAX_LOGIN_ATTEMPTS;
 
     };

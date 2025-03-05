@@ -1,7 +1,7 @@
 #ifndef AUTH_CONTROL
 #define AUTH_CONTROL
 
-#include "src/auth/AuthModel.h"
+// #include "src/auth/AuthModel.h"
 #include "src/ModelFacade.h"
 #include "AuthView.h"
 

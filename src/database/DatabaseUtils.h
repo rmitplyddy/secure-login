@@ -24,7 +24,8 @@ namespace Database {
     std::string createUser(const std::unique_ptr<UserDTO>& newUser, 
                             const std::string& dbname = DATABASE_FILE);
     int checkLoginAttempts(const std::unique_ptr<UserDTO>& newUser, 
-                            sqlite3* db);
+                            const std::string& dbname = DATABASE_FILE);
+    
 
     
 }

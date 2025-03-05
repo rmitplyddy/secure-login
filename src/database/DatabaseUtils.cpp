@@ -7,14 +7,14 @@
 namespace Database {
 
    
-    static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
+    // static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
         
-        for(int i = 0; i < argc; i++) {
-            printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-        }
-        printf("\n");
-        return 0;
-    }
+    //     for(int i = 0; i < argc; i++) {
+    //         printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+    //     }
+    //     printf("\n");
+    //     return 0;
+    // }
 
 
     std::string checkDatabaseExists(const std::string& dbName){
@@ -102,8 +102,51 @@ attacks.
 // AND attempt_time > NOW() - INTERVAL 30 MINUTE;
 
 
-    int checkLoginAttempts(const std::unique_ptr<UserDTO>& newUser, sqlite3* db) {
+    int checkLoginAttempts(const std::unique_ptr<UserDTO>& user, 
+                            const std::string& dbName) {
 
+        sqlite3 *db = nullptr;
+        sqlite3_open(dbName.c_str(), &db); // db initialised to file
+
+        std::string query = "SELECT COUNT(*) FROM login_attempts"
+                            "WHERE username = ? "
+                            "AND attemp_time > ( "
+                                "SELECT MAX(attempt_time) FROM login_attempts " 
+                                "WHERE username = ? AND success = TRUE"
+                            ");";
+        int failedAttempts = 0;
+        sqlite3_stmt* stmt = nullptr;
+        if (sqlite3_prepare_v2(db, query.c_str(), 
+                                -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, user->username.c_str(), -1, 
+                                    SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 2, user->username.c_str(), -1, 
+                                    SQLITE_TRANSIENT);
+            if (sqlite3_step(stmt) == SQLITE_ROW) {
+                failedAttempts = sqlite3_column_int(stmt, 0);
+            }
+        }
+        return failedAttempts;
+    }
+
+
+    void incrementLoginAttempt(const std::unique_ptr<UserDTO>& user, 
+                                sqlite3* db, std::string success) {
+
+        std::string loginAttemptQuery = 
+                                    "INSERT INTO login_attempts (username, success) " \
+                                    "VALUES (?, ?);";
+
+        sqlite3_stmt* stmt = nullptr;
+        if (sqlite3_prepare_v2(db, loginAttemptQuery.c_str(), 
+                                -1, &stmt, nullptr) == SQLITE_OK) {
+            sqlite3_bind_text(stmt, 1, user->username.c_str(), -1, 
+                                        SQLITE_TRANSIENT);
+            sqlite3_bind_text(stmt, 2, success.c_str(), -1, 
+                                        SQLITE_TRANSIENT);
+            sqlite3_step(stmt);
+        }
+        
     }
 
     std::string validateUser(const std::unique_ptr<UserDTO>& auth, 
@@ -114,23 +157,22 @@ attacks.
 
         std::ostringstream result("");
 
-        std::string query = "SELECT password "\ 
-                            "FROM users "\ 
-                            "WHERE username = ? ;";
+        std::string query = "SELECT password " \
+                            "FROM users " \
+                            "WHERE username = ?;";
 
         sqlite3_stmt* stmt = nullptr;
 
         int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
         
         if (rc != SQLITE_OK) {
-            result << "SQL error: check binding error ";
+            qDebug() << query;
+            result << "SQL error: check prepared statement ";
         }
         else {
-            
-            rc = sqlite3_bind_text(stmt, 1, auth->username.c_str(), -1, 
-                                    SQLITE_TRANSIENT);
-
-            if (rc != SQLITE_OK) {
+            qDebug() << auth->username;
+            if (sqlite3_bind_text(stmt, 1, auth->username.c_str(), -1, 
+                                    SQLITE_TRANSIENT) != SQLITE_OK) {
                 result << "SQL error: check binding error ";
             }
             else {
@@ -141,8 +183,12 @@ attacks.
                         std::string(reinterpret_cast<const char*>(sqlresult));
                     std::string enteredPW = auth->password;
                     if (verifyPassword(enteredPW, storedPassword)) {
+                        incrementLoginAttempt(auth, db, "TRUE");
                         result << "SUCCESS";
-                    } 
+                    }
+                    else {
+                        incrementLoginAttempt(auth, db, "FALSE");
+                    }
                 }
             }
         }
@@ -189,7 +235,8 @@ attacks.
 
     std::string editUser(std::string username, std::string password) {
         std::cout << "FIXME" << std::endl;
-
+        std::cout << username << " " << password << std::endl;
+        return "FIXME";
     }
 
 

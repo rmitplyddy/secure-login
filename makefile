@@ -56,14 +56,14 @@ SOURCES       = src/main.cpp \
 		src/CustomTextInput.cpp \
 		src/AppController.cpp \
 		src/ModelFacade.cpp \
-		src/auth/AuthModel.cpp \
 		src/auth/AuthController.cpp \
 		src/user/UserBaseView.cpp \
 		src/auth/AuthView.cpp \
 		src/user/new/NewUserController.cpp \
 		src/user/new/NewUserView.cpp \
 		src/database/PasswordHasher.cpp \
-		src/database/DatabaseUtils.cpp moc_AppController.cpp \
+		src/database/DatabaseUtils.cpp \
+		src/database/DatabaseAdmin.cpp moc_AppController.cpp \
 		moc_CustomTextInput.cpp \
 		moc_AuthController.cpp \
 		moc_UserBaseView.cpp \
@@ -74,7 +74,6 @@ OBJECTS       = main.o \
 		CustomTextInput.o \
 		AppController.o \
 		ModelFacade.o \
-		AuthModel.o \
 		AuthController.o \
 		UserBaseView.o \
 		AuthView.o \
@@ -82,6 +81,7 @@ OBJECTS       = main.o \
 		NewUserView.o \
 		PasswordHasher.o \
 		DatabaseUtils.o \
+		DatabaseAdmin.o \
 		moc_AppController.o \
 		moc_CustomTextInput.o \
 		moc_AuthController.o \
@@ -436,25 +436,25 @@ DIST          = /opt/homebrew/share/qt/mkspecs/features/spec_pre.prf \
 		src/ModelFacade.h \
 		src/UserDTO.h \
 		src/CustomTextInput.h \
-		src/auth/AuthModel.h \
 		src/auth/AuthController.h \
 		src/user/UserBaseView.h \
 		src/auth/AuthView.h \
 		src/user/new/NewUserController.h \
 		src/user/new/NewUserView.h \
 		src/database/PasswordHasher.h \
-		src/database/DatabaseUtils.h src/main.cpp \
+		src/database/DatabaseUtils.h \
+		src/database/DatabaseAdmin.cpp src/main.cpp \
 		src/CustomTextInput.cpp \
 		src/AppController.cpp \
 		src/ModelFacade.cpp \
-		src/auth/AuthModel.cpp \
 		src/auth/AuthController.cpp \
 		src/user/UserBaseView.cpp \
 		src/auth/AuthView.cpp \
 		src/user/new/NewUserController.cpp \
 		src/user/new/NewUserView.cpp \
 		src/database/PasswordHasher.cpp \
-		src/database/DatabaseUtils.cpp
+		src/database/DatabaseUtils.cpp \
+		src/database/DatabaseAdmin.cpp
 QMAKE_TARGET  = secure-login
 DESTDIR       = 
 TARGET        = secure-login.app/Contents/MacOS/secure-login
@@ -1199,8 +1199,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/share/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/AppController.h src/ModelFacade.h src/UserDTO.h src/CustomTextInput.h src/auth/AuthModel.h src/auth/AuthController.h src/user/UserBaseView.h src/auth/AuthView.h src/user/new/NewUserController.h src/user/new/NewUserView.h src/database/PasswordHasher.h src/database/DatabaseUtils.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/CustomTextInput.cpp src/AppController.cpp src/ModelFacade.cpp src/auth/AuthModel.cpp src/auth/AuthController.cpp src/user/UserBaseView.cpp src/auth/AuthView.cpp src/user/new/NewUserController.cpp src/user/new/NewUserView.cpp src/database/PasswordHasher.cpp src/database/DatabaseUtils.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/AppController.h src/ModelFacade.h src/UserDTO.h src/CustomTextInput.h src/auth/AuthController.h src/user/UserBaseView.h src/auth/AuthView.h src/user/new/NewUserController.h src/user/new/NewUserView.h src/database/PasswordHasher.h src/database/DatabaseUtils.h src/database/DatabaseAdmin.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/CustomTextInput.cpp src/AppController.cpp src/ModelFacade.cpp src/auth/AuthController.cpp src/user/UserBaseView.cpp src/auth/AuthView.cpp src/user/new/NewUserController.cpp src/user/new/NewUserView.cpp src/database/PasswordHasher.cpp src/database/DatabaseUtils.cpp src/database/DatabaseAdmin.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1430,15 +1430,15 @@ moc_AppController.cpp: src/AppController.h \
 		/opt/homebrew/opt/qt/include/QtGui/qguiapplication_platform.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qdialogbuttonbox.h \
 		src/auth/AuthController.h \
-		src/auth/AuthModel.h \
 		src/ModelFacade.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/auth/AuthView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -1684,9 +1684,10 @@ moc_CustomTextInput.cpp: src/CustomTextInput.h \
 	/opt/homebrew/share/qt/libexec/moc $(DEFINES) --include /Users/phillyddy/projects/secure-login/moc_predefs.h -I/opt/homebrew/share/qt/mkspecs/macx-clang -I/Users/phillyddy/projects/secure-login -I/opt/homebrew/opt/qt/include -I/opt/homebrew/opt/sqlite/include -I/opt/homebrew/opt/argon2/include -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/16/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk/usr/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -F/opt/homebrew/lib src/CustomTextInput.h -o moc_CustomTextInput.cpp
 
 moc_AuthController.cpp: src/auth/AuthController.h \
-		src/auth/AuthModel.h \
 		src/ModelFacade.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
@@ -1797,7 +1798,6 @@ moc_AuthController.cpp: src/auth/AuthController.h \
 		/opt/homebrew/opt/qt/include/QtCore/qset.h \
 		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
 		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/auth/AuthView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -2353,8 +2353,9 @@ moc_AuthView.cpp: src/auth/AuthView.h \
 
 moc_NewUserController.cpp: src/user/new/NewUserController.h \
 		src/ModelFacade.h \
-		src/auth/AuthModel.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
@@ -2465,7 +2466,6 @@ moc_NewUserController.cpp: src/user/new/NewUserController.h \
 		/opt/homebrew/opt/qt/include/QtCore/qset.h \
 		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
 		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/user/new/NewUserView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -3009,15 +3009,15 @@ main.o: src/main.cpp /opt/homebrew/lib/QtWidgets.framework/Headers/QApplication 
 		/opt/homebrew/opt/qt/include/QtGui/qscreen_platform.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qdialogbuttonbox.h \
 		src/auth/AuthController.h \
-		src/auth/AuthModel.h \
 		src/ModelFacade.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/auth/AuthView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -3448,15 +3448,15 @@ AppController.o: src/AppController.cpp src/AppController.h \
 		/opt/homebrew/opt/qt/include/QtGui/qguiapplication_platform.h \
 		/opt/homebrew/opt/qt/include/QtWidgets/qdialogbuttonbox.h \
 		src/auth/AuthController.h \
-		src/auth/AuthModel.h \
 		src/ModelFacade.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
 		/opt/homebrew/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/lib/QtCore.framework/Headers/qdebug.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/auth/AuthView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -3492,8 +3492,9 @@ AppController.o: src/AppController.cpp src/AppController.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AppController.o src/AppController.cpp
 
 ModelFacade.o: src/ModelFacade.cpp src/ModelFacade.h \
-		src/auth/AuthModel.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
@@ -3603,17 +3604,14 @@ ModelFacade.o: src/ModelFacade.cpp src/ModelFacade.h \
 		/opt/homebrew/opt/qt/include/QtCore/qshareddata_impl.h \
 		/opt/homebrew/opt/qt/include/QtCore/qset.h \
 		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
-		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h
+		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ModelFacade.o src/ModelFacade.cpp
 
-AuthModel.o: src/auth/AuthModel.cpp src/auth/AuthModel.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AuthModel.o src/auth/AuthModel.cpp
-
 AuthController.o: src/auth/AuthController.cpp src/auth/AuthController.h \
-		src/auth/AuthModel.h \
 		src/ModelFacade.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
@@ -3724,7 +3722,6 @@ AuthController.o: src/auth/AuthController.cpp src/auth/AuthController.h \
 		/opt/homebrew/opt/qt/include/QtCore/qset.h \
 		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
 		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/auth/AuthView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -4274,8 +4271,9 @@ AuthView.o: src/auth/AuthView.cpp src/auth/AuthView.h \
 
 NewUserController.o: src/user/new/NewUserController.cpp src/user/new/NewUserController.h \
 		src/ModelFacade.h \
-		src/auth/AuthModel.h \
 		src/UserDTO.h \
+		src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/database/DatabaseUtils.h \
 		src/database/PasswordHasher.h \
 		/opt/homebrew/opt/argon2/include/argon2.h \
@@ -4386,7 +4384,6 @@ NewUserController.o: src/user/new/NewUserController.cpp src/user/new/NewUserCont
 		/opt/homebrew/opt/qt/include/QtCore/qset.h \
 		/opt/homebrew/opt/qt/include/QtCore/qhash.h \
 		/opt/homebrew/opt/qt/include/QtCore/qvarlengtharray.h \
-		/opt/homebrew/opt/sqlite/include/sqlite3.h \
 		src/user/new/NewUserView.h \
 		src/user/UserBaseView.h \
 		src/CustomTextInput.h \
@@ -4938,6 +4935,10 @@ DatabaseUtils.o: src/database/DatabaseUtils.cpp src/database/DatabaseUtils.h \
 		src/UserDTO.h \
 		/opt/homebrew/opt/sqlite/include/sqlite3.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DatabaseUtils.o src/database/DatabaseUtils.cpp
+
+DatabaseAdmin.o: src/database/DatabaseAdmin.cpp src/database/DatabaseAdmin.h \
+		/opt/homebrew/opt/sqlite/include/sqlite3.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o DatabaseAdmin.o src/database/DatabaseAdmin.cpp
 
 moc_AppController.o: moc_AppController.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_AppController.o moc_AppController.cpp

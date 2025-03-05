@@ -9,8 +9,8 @@ namespace Database {
     std::string DatabaseAdmin::DATABASE_FILE = "secure-login.db";
     const std::string DatabaseAdmin::USER_TABLE_STATEMENT = 
                             "CREATE TABLE IF NOT EXISTS users ("
-                            "username int NOT NULL, "
-                            "password VARCHAR(100), "
+                            "username VARCHAR(255) NOT NULL, "
+                            "password VARCHAR(255), "
                             "PRIMARY KEY (username) " 
                             ");";
     // table to track login attempts
@@ -18,16 +18,15 @@ namespace Database {
                             "CREATE TABLE login_attempts ("
                             "userID INT PRIMARY KEY AUTO_INCREMENT,"
                             "username VARCHAR(255),"
-                            "attemptTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                            "attempt_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
                             "success BOOLEAN"
                             ");";
 
 
 
     DatabaseAdmin::DatabaseAdmin() {
-
         if (checkDatabaseExists() == "SUCCESS") {
-            std::cout << initTable(USER_TABLE_STATEMENT) << std::endl;
+            initTable(USER_TABLE_STATEMENT);
             initTable(LOGIN_ATTEMPTS_TABLE_STATEMENT);
         }
     }

@@ -38,17 +38,18 @@ const int ModelFacade::MAX_LOGIN_ATTEMPTS = 3;
 
 
 
-    bool ModelFacade::authenticateUser(const std::unique_ptr<UserDTO>& userDTO) {
+    std::string ModelFacade::authenticateUser(const std::unique_ptr<UserDTO>& userDTO) {
 
-        bool success = false;
+        std::string result = "";
 
-        std::string result = Database::validateUser(userDTO);
-
-        if (result == "SUCCESS") {
-            success = true;
+        if (Database::checkLoginAttempts(userDTO) < 3) {
+            result = Database::validateUser(userDTO);
         }
-
-        return success;
+        else {
+            // error message to return to user
+            result = "Invalid Username or Password";
+        }
+        return result;
     }
 
 
@@ -65,6 +66,7 @@ void ModelFacade::checkPasswordStrength(const std::unique_ptr<UserDTO>& userDTO)
         // temporary lock on account where too many failed attempts occurred
                 // include a safe unlock process
         // enforce reset for breach mechanism
+
 
         int pwSize = userDTO->password.size();
         if (pwSize < 8) {
